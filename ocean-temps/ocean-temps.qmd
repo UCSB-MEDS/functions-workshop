@@ -1,0 +1,174 @@
+---
+title: "Ocean Temps"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+Approach:
+1. wrangle 1 data set
+2. turn into basic function
+3. add if else to check that required columns are present in data
+4. add arg that allows you to pick which temp cols to include (with default value)
+5. for loop to process all raw data & combine them into a single file
+
+Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpenteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
+
+  1. Alegria Reef: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14
+  2. Mohawk Reef: https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51
+  3. Carpenteria Reef: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26
+  
+## **Load libraries**
+```{r}
+library(tidyverse)
+library(naniar)
+```
+
+## **Source functions**
+```{r}
+source(here::here("my-functions", "clean_ocean_temps.R"))
+source(here::here("my-functions", "plot_ocean_temps.R"))
+```
+
+## **Import raw data** 
+
+### Either download from EDI directly: 
+```{r}
+# ale <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2008.14&entityid=15c25abf9bb72e2017301fa4e5b2e0d4")
+# mko <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2007.16&entityid=02629ecc08a536972dec021f662428aa")
+# car <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2004.26&entityid=1d7769e33145ba4f04aa0b0a3f7d4a76")
+```
+
+## OR download files (they are large!) from Google Drive and save to `data/raw_data/sbc_lter_temps`
+```{r}
+alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
+carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+```
+
+## clean data 
+```{r}
+alegria_cleaned <- alegria |> 
+  
+  # keep only necessary columns
+  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  
+  # add column with site name
+  mutate(site = rep("Alegria Reef")) |> 
+  
+  # create date time column
+  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = chron::times(as.numeric(decimal_time))) |> 
+  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  
+  # coerce data types
+  mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+         year = as.factor(year),
+         month = as.factor(month),
+         day = as.numeric(day)) |>
+  
+  # add month name
+  mutate(month_name = as.factor(month.name[month])) |>
+  
+  # replace 9999s with NAs (will throw warning if var isn't present, but still execute)
+  replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+  
+  # select/reorder desired columns
+  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+
+```
+
+## plot data
+```{r}
+
+```
+
+--------------------------------------------------------------------------------
+
+## Use function to wrangle data
+```{r}
+alegria_clean <- clean_ocean_temps(df = alegria, include_temps = c("Temp_bot"))
+mohawk_clean <- clean_ocean_temps(df = mohawk)
+carpenteria_clean <- clean_ocean_temps(df = carpenteria, include_temps = c("Temp_mid", "Temp_bot"))
+# diamonds_clean <- clean_ocean_temps(df = diamonds) # example of data our function won't accept
+```
+
+## Use function to plot data
+```{r}
+alegria_plot <- plot_ocean_temps(df = alegria_clean)
+mohawk_plot <- plot_ocean_temps(df = mohawk_clean)
+carpenteria_plot <- plot_ocean_temps(df = carpenteria_clean)
+```
+
+--------------------------------------------------------------------------------
+
+
+## for loop to read in all data
+```{r}
+# get list of temperature files ----
+temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
+
+# for loop to read in each file ---
+for (i in 1:length(temp_files)){
+  
+  # get object name from file name ----
+  file_name <- temp_files[i]
+  message("Reading in: ", file_name)
+  split_name <- str_split_1(file_name, "_") # ! https://stringr.tidyverse.org/reference/str_split.html !
+  site_name <- split_name[1] 
+  message("Saving as: ", site_name)
+  
+  # read in csv and assign to our object name ----
+  assign(site_name, read_csv(here::here("data", "raw_data", file_name))) # ! https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop !
+  
+}
+```
+
+## Iteration 1: for loop to clean all data
+First need to figure out how to call in objects from environment
+```{r}
+# get list of dfs to clean ----
+raw_data <- c("alegria", "carpenteria", "mohawk")
+
+# for loop to clean dfs using `clean_ocean_temps()`
+for (i in 1:length(raw_data)) {
+  
+  # get df ----
+  message("cleaning df", i, ": -------- ", raw_data[i], " --------")
+  get(raw_data[i])  # ! https://community.rstudio.com/t/loop-through-all-dfs-in-environment/70943 !
+  
+  # create new name ----
+  df_name <- raw_data[i]
+  df_clean_name <- paste0(df_name, "_clean")
+  message("New df will be named: ", df_clean_name)
+
+}
+```
+
+## Iteration 2: for loop to clean all data & assign to inutitive object name
+```{r}
+# get list of dfs to clean ----
+raw_data <- c("ale", "car", "mko")
+
+# first need to figure out how to call objects from environment
+get(raw_data[1]) # calls first element in vector, `raw_data` 
+
+# for loop to clean dfs using `clean_ocean_temps()`
+for (i in 1:length(raw_data)) {
+  
+  # print message ----
+  message("cleaning df ", i, ": -------- ", raw_data[i], " --------")
+  
+  # create new df name ----
+  df_name <- raw_data[i]
+  df_clean_name <- paste0(df_name, "_clean")
+  message("New df will be named: ", df_clean_name)
+  
+  # clean data ----
+  assign(df_clean_name, clean_ocean_temps(df = get(raw_data[i]), include_temps = c("Temp_top", "Temp_bot")))
+  
+  message("------------------------------------")
+}
+```
+
+## for loop to plot all data

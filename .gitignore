@@ -42,4 +42,4 @@ vignettes/*.pdf
 .DS_Store
 
 # raw data
-/raw_data/
+data/raw_data/
