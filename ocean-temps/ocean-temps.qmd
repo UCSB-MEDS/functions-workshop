@@ -48,7 +48,7 @@ carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_
 
 ## clean data 
 ```{r}
-alegria_cleaned <- alegria |> 
+alegria_clean <- alegria |> 
   
   # keep only necessary columns
   select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
@@ -80,24 +80,41 @@ alegria_cleaned <- alegria |>
 
 ## plot data
 ```{r}
+alegria_plot <- alegria_clean |> 
+  
+  group_by(month_name) |> 
+  
+    ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+    ggridges::geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+    scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+    scale_y_discrete(limits = rev(month.name)) + 
+    scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+    labs(x = "Bottom Temperature (°C)",
+         title = "Bottom Temperatures at Alegria Reef, Santa Barbara, CA",
+         subtitle = "Temperatures (°C) aggregated by month from 2005 - 2022") +
+    ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.y = element_blank()
+    )
 
+alegria_plot
 ```
 
 --------------------------------------------------------------------------------
 
 ## Use function to wrangle data
 ```{r}
-alegria_clean <- clean_ocean_temps(df = alegria, include_temps = c("Temp_bot"))
-mohawk_clean <- clean_ocean_temps(df = mohawk)
-carpenteria_clean <- clean_ocean_temps(df = carpenteria, include_temps = c("Temp_mid", "Temp_bot"))
+alegria_clean <- clean_ocean_temps(raw_df = alegria, include_temps = c("Temp_bot"))
+mohawk_clean <- clean_ocean_temps(raw_df = mohawk)
+carpenteria_clean <- clean_ocean_temps(raw_df = carpenteria, include_temps = c("Temp_mid", "Temp_bot"))
 # diamonds_clean <- clean_ocean_temps(df = diamonds) # example of data our function won't accept
 ```
 
 ## Use function to plot data
 ```{r}
-alegria_plot <- plot_ocean_temps(df = alegria_clean)
-mohawk_plot <- plot_ocean_temps(df = mohawk_clean)
-carpenteria_plot <- plot_ocean_temps(df = carpenteria_clean)
+alegria_plot <- plot_ocean_temps(clean_df = alegria_clean)
+mohawk_plot <- plot_ocean_temps(clean_df = mohawk_clean)
+carpenteria_plot <- plot_ocean_temps(clean_df = carpenteria_clean)
 ```
 
 --------------------------------------------------------------------------------

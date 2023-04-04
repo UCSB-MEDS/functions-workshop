@@ -1,0 +1,23 @@
+---
+title: "One approach to streamlining your analytical workflows using functions and for loops"
+author: Sam Csik
+date: April 14, 2023
+theme: minty
+format: html
+---
+
+## Introduction
+
+Some text about the benefits of using functions & for loops
+
+::: panel-tabset
+## No functions
+
+<!-- {{< include /sections/1-no-functions.qmd >}} -->
+
+## Functions
+
+## Functions + for loops
+
+:::
+
