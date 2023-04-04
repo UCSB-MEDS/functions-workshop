@@ -111,7 +111,8 @@ clean_ocean_temps <- function(raw_df){
 ```
 
 Fourth iteration goal: allow for uses to specify which temp variables (`Temp_top`, `Temp_mid`, `Temp_bot`) to keep
-6. add default argument `include_temps`
+6.  add default argument `include_temps`
+7.  update `select` to that it's flexible
 ```{r}
 clean_ocean_temps <- function(raw_df, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ # 6
   
@@ -128,7 +129,7 @@ clean_ocean_temps <- function(raw_df, include_temps = c("Temp_top", "Temp_mid", 
   all_cols <- append(standard_cols, include_temps) # standard cols + temp cols that the user can choose to include (or not)
   
   temps_clean <- raw_df |> 
-    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    select(all_of(all_cols)) |> # ! https://tidyselect.r-lib.org/reference/all_of.html !
     mutate(site = rep(site_name)) |> 
     unite(date, year, month, day, sep = "-", remove = FALSE) |> 
     mutate(time = chron::times(as.numeric(decimal_time))) |> 
@@ -139,9 +140,57 @@ clean_ocean_temps <- function(raw_df, include_temps = c("Temp_top", "Temp_mid", 
            day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+    select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) # 7 ! https://tidyselect.r-lib.org/reference/all_of.html !
   
   return(temps_clean) 
 }
 ```
 
+Fifth iteration goal: add if else to evaluate data
+
+```{r}
+clean_ocean_temps <- function(raw_df, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ # 6
+  
+  require(dplyr) 
+  require(chron)
+  require(naniar)
+  
+  # if data contains these colnames, clean the script
+  if(all(c("year", "month", "day", "decimal_time", "Temp_bot", "Temp_top", "Temp_mid") %in% colnames(raw_df))) { # ! !
+    
+    message("Cleaning data...")
+    
+    # get site name as character string from object name (raw_df)
+    site_name <- deparse(substitute(raw_df)) 
+    site_name <- paste(str_to_title(site_name), "Reef")
+    
+    # 6 - columns to select 
+    standard_cols <- c("year", "month", "day", "decimal_time") # cols that are always selected
+    all_cols <- append(standard_cols, include_temps) # standard cols + temp cols that the user can choose to include (or not)
+    
+    temps_clean <- raw_df |> 
+      select(all_of(all_cols)) |> # ! https://tidyselect.r-lib.org/reference/all_of.html !
+      mutate(site = rep(site_name)) |> 
+      unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = chron::times(as.numeric(decimal_time))) |> 
+      unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+      mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+             year = as.factor(year),
+             month = as.factor(month),
+             day = as.numeric(day)) |>
+      mutate(month_name = as.factor(month.name[month])) |>
+      replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) # 7 ! https://tidyselect.r-lib.org/reference/all_of.html !
+    
+    return(temps_clean) 
+    
+  } else {
+    
+    stop("The data frame provided does not include the necessary columns. Double check your data!")
+    
+  }
+  
+}
+```
+
+Now analyze data

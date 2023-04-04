@@ -165,7 +165,7 @@ for (i in 1:length(raw_data)) {
 ## Iteration 2: for loop to clean all data & assign to inutitive object name
 ```{r}
 # get list of dfs to clean ----
-raw_data <- c("ale", "car", "mko")
+raw_data <- c("alegria", "carpenteria", "mohawk")
 
 # first need to figure out how to call objects from environment
 get(raw_data[1]) # calls first element in vector, `raw_data` 
