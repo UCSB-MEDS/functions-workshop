@@ -11,6 +11,7 @@ editor_options:
   chunk_output_type: console
 ---
 
+
 ## Introduction
 
 Some text about the benefits of using functions & for loops -- jumpinng into the deep end is challenging for anyone. important to make this an iterative process
@@ -28,6 +29,7 @@ Let's say I want to look at ocean temperature data from three coastal sites with
 I (personally) find it absolutely critical to figure out how to clean/wrangle/tidy one data set on its own before I even begin thinking about writing a function. The data set I'm using contains *lots* of variables that I'm not interested in. Additionally....
 
 ### **i.** Load libraries
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -39,9 +41,11 @@ library(naniar)
 library(ggridges)
 ```
 
+
 ### **ii.** Import raw data 
 
 Either download from the [Environmental Data Portal](https://portal.edirepository.org/nis/home.jsp) (EDI) directly: 
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -52,7 +56,9 @@ Either download from the [Environmental Data Portal](https://portal.edirepositor
 # car <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2004.26&entityid=1d7769e33145ba4f04aa0b0a3f7d4a76")
 ```
 
+
 OR download files (they are large!) from [Google Drive](https://drive.google.com/drive/folders/1S2IY-qo29CU9ahRj_QNfFLfrh7DnT3CG?usp=share_link) and save to `data/raw_data/` (be sure to unzip them!):
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -63,9 +69,11 @@ mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.c
 carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 ```
 
+
 ### **iii.** Clean data 
 
 Below, we select only the necessary columns (there are *far* too many (87) in the raw data), add a column for site name (the only way to tell which site the data were collected from is by looking at the file name), formatting dates/times, and replacing missing value codes with *`NA`*.
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -102,9 +110,11 @@ alegria_clean <- alegria |>
 
 ```
 
+
 ### **iv.** Plot the data
 
 Here, we create a ridgeline plot (using the `{ggridges}` package) showing aggregate bottom temperatures (2005-2020), by month, at Alegria reef.
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -130,7 +140,9 @@ alegria_plot <- alegria_clean |>
 alegria_plot
 ```
 
+
 If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the `mohawk` and `carpenteria` data frames) -- this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g. forgetting to update a data frame name, typos, etc.). If you'd like to check out the code for the `mohawk` and `carpenteria` data sets, unfold the code chunk below:
+
 
 ```{r}
 #| eval: true
@@ -213,12 +225,14 @@ carpenteria_plot <- carpenteria_clean |>
 carpenteria_plot
 ```
 
+
 ## **Iteration 2:** Write functions to clean & plot your data
 
 It's helpful to first identify which parts of the cleaning code need to be generalized/made "flexible" so that any of our three data frames can be passed to it for cleaning. For us, that's:
 
 1.  the name of the raw data frame
 2.  the site name character string that's repeated for the length of the added `site` column
+
 
 ```{r}
 #| eval: false
@@ -241,6 +255,7 @@ alegria_clean <- alegria |> # 1) the name of the raw df (here, 'alegria') AND 1)
   select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
 ```
 
+
 ### **i.** Write a function to **clean** data sets
 
 Now we can start to build out our function. We'll start by creating a super basic function, then build in more complexity. I encourage you to test out your function after each version to ensure that it works as you intend it to.
@@ -250,6 +265,7 @@ Now we can start to build out our function. We'll start by creating a super basi
 ## Version 1 
 
 To start, let's create the skeleton of our function, which we'll call `clean_ocean_temps()`:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -260,7 +276,9 @@ clean_ocean_temps <- function(){
 }
 ```
 
+
 Now, let's copy and paste our cleaning code for Alegria Reef data (from **Iteration 1**, above) into the body of the function (i.e. within the curly brackets, `{}`).
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -286,6 +304,7 @@ clean_ocean_temps <- function(){
 }
 ```
 
+
 Next, we want the ability to provide our function with any three of our data sets for processing. We'll do this following these steps: 
 
 1.  create an input (aka **argument**) called `raw_data` inside `function()` (NOTE: you can name your argument however you'd like, but preferably something short and descriptive) 
@@ -293,6 +312,7 @@ Next, we want the ability to provide our function with any three of our data set
 3.  update the name of the object we save our clean data to (currently `alegria_clean`) to something a bit more generalized, like `temps_clean` and `return()` our clean data frame object at the end
 
 Recall that part of our cleaning pipeline includes adding a column called `site`, with repeating values that are the site name. For now, I'll just put some placeholder text (*___ Reef*) and we'll figure out how to make that text match up with the data in the next versions of our function. 
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -319,7 +339,9 @@ clean_ocean_temps <- function(raw_data){ # step 1
 }
 ```
 
+
 Lastly, let's make sure our function works. Run your function so that it's saved to your global environment, then use it on your raw data sets:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -330,9 +352,11 @@ mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
 carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
 ```
 
+
 ## Version 2
 
 Before we get too far, it's probably a good idea to make sure any required dependencies are loaded with our function. A good way to check that your function works as-is is to restart R, reload your data and your function, then use your function:
+
 
 ```{r}
 #| eval: false
@@ -371,9 +395,11 @@ mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
 carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
 ```
 
+
 **Does it work?**
 
-If you're following along here, you most likely got an error message that says something like `...could not find function "select"`. We use lots of existing functions within `clean_ocean_temps()` that are called from external packages: `{dplyr}`, `{tidyr}`, `{chron}`, `{naniar}`. It's best not to assume that a user (including yourself) will have already installed and loaded those packages prior to trying to use `clean_ocean_temps()`. To fix this, we can call `library()` inside our function to load all required packages before executing our cleaning code. If a user tries to use `clean_ocean_names()` but doesn't have a required package(s) already installed, it will return an error (e.g. `Error in library(x): there is no package called 'x'`).
+If you're following along here, you most likely got an error message that says something like `...could not find function "select"`. We use lots of existing functions within `clean_ocean_temps()` that are called from external packages: `{dplyr}`, `{chron}`, `{naniar}`. It's best not to assume that a user (including yourself) will have already installed and loaded those packages prior to trying to use `clean_ocean_temps()`. To fix this, we can call `library()` inside our function to load all required packages before executing our cleaning code. If a user tries to use `clean_ocean_names()` but doesn't have a required package(s) already installed, it will return an error (e.g. `Error in library(x): there is no package called 'x'`).
+
 
 ```{r}
 #| eval: false
@@ -406,12 +432,12 @@ clean_ocean_temps <- function(raw_data){
 }
 ```
 
-Again, rerun your updated function and try using it to make sure it works as intended:
 ```{r}
 alegria_clean <- clean_ocean_temps(raw_data = alegria)
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
 carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
 ```
+
 
 ## Version 3
 ## Version 4
@@ -422,6 +448,7 @@ carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
 ### **ii:** Write a function to **plot** data sets
 
 ### **iii:** Use your functions to **clean and plot** your data sets
+
 
 
 

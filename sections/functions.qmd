@@ -56,9 +56,9 @@ Second iteration goal: make sure any dependencies are loaded with function
 ```{r}
 clean_ocean_temps <- function(raw_df){
   
-  require(dplyr) # 3
-  require(chron)
-  require(naniar)
+  library(dplyr) # 3
+  library(chron)
+  library(naniar)
  
   temps_clean <- raw_df |> 
     select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
