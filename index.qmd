@@ -225,10 +225,10 @@ It's helpful to first identify which parts of the cleaning code need to be gener
 #| echo: true
 #| message: false
 #| warning: false
-alegria_clean <- alegria |> # 1) the name of the raw df (here, 'alegria') AND 1) the name of the object my clean data will be saved to (here, `alegria_clean`)
+alegria_clean <- alegria |> # 1
   select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
   filter(year %in% c(2005:2020)) |> 
-  mutate(site = rep("Alegria Reef")) |> # 2) the site name character string that's repeated across the `site` column
+  mutate(site = rep("Alegria Reef")) |> # 2
   unite(date, year, month, day, sep = "-", remove = FALSE) |> 
   mutate(time = times(as.numeric(decimal_time))) |> 
   unite(date_time, date, time, sep = " ", remove = TRUE) |> 
@@ -289,8 +289,35 @@ clean_ocean_temps <- function(){
 Next, we want the ability to provide our function with any three of our data sets for processing. We'll do this following these steps: 
 
 1.  create an input (aka **argument**) called `raw_data` inside `function()` (NOTE: you can name your argument however you'd like, but preferably something short and descriptive) 
-2.  substitute our new `raw_data` argument for the hard-coded data frame name (e.g. `alegria` in the code above) within our cleaning pipeline
+2.  replace our hard-coded data frame name (e.g. `alegria` in the code above) in our cleaning pipeline with `raw_data`
 3.  update the name of the object we save our clean data to (currently `alegria_clean`) to something a bit more generalized, like `temps_clean` and `return()` our clean data frame object at the end
+
+::: {.callout-note collapse="true"}
+## What is `return()` and when is it necessary?
+
+Oftentimes, we want a function to do some processing on whatever we provide it and then give us back the result. We use the `return()` function to do this in R. 
+
+R **automatically** returns the the last output of a function -- here, it isn't necessary to `return(temps_clean)` since the `temps_clean` data frame is the last output of our `clean_ocean_temps()` function.  
+
+An explicit `return()` is used to return a value immediately from a function. If it is *not* the last statement of a function, `return()` will prematurely end the function -- for example, if `x = 2`, the string, `"Positive"` will be returned (and the remaining `if else` statement will not be executed):
+
+```{r}
+check_number <- function(x) {
+  if (x > 0) {
+    return("Positive")
+  }
+  else if (x < 0) {
+    return("Negative")
+  }
+  else {
+    return("Zero")
+  }
+}
+```
+
+I tend to include an explicit `return()` at the end of my functions because I think it makes it easier to read/understand the code, but check out [this interesting dialogue](https://stackoverflow.com/questions/11738823/explicitly-calling-return-in-a-function-or-not) on whether this is best practice or not.
+
+:::
 
 Recall that part of our cleaning pipeline includes adding a column called `site`, with repeating values that are the site name. For now, I'll just put some placeholder text (*___ Reef*) and we'll figure out how to make that text match up with the data in the next versions of our function. 
 ```{r}
@@ -408,14 +435,171 @@ clean_ocean_temps <- function(raw_data){
 
 Again, rerun your updated function and try using it to make sure it works as intended:
 ```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
 alegria_clean <- clean_ocean_temps(raw_data = alegria)
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
 carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
 ```
 
 ## Version 3
+
+Next, let's work on adding the appropriate site name to our `site` column. There are *many* creative ways to go about forming the site name that will get added as a repeating value to the `site` column -- two that came to mind to start were:
+
+a. adding a second function argument that takes a site name as a character string (e.g. `site_name = "Alegria Reef"`) 
+b. get the site name from the raw data object name (e.g. we read in `alegria_mooring_ale_20210617.csv` and saved it to an object named `alegria`)
+
+Here, we'll opt for option (b). To do so, we need to: 
+
+1. use the `deparse()` and `substitute()` functions together to convert an object name (here, `raw_data`) to a character string (this [resource](https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r ) was helpful for figuring this out).
+2.  format our extracted character string (convert to Title Case and paste `"Reef"` at the end)
+3.  substitute our formatted character string site name in for the hard-coded site name in `mutate(site = rep("___ Reef"))`
+4.  don't forget to import the `{stringr}` package at the top of your function!
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data){
+  
+  require(dplyr) 
+  require(tidyr)
+  require(stringr) # 4
+  require(chron)
+  require(naniar)
+ 
+  site_name <- deparse(substitute(raw_data)) # 1
+  site_name <- paste(str_to_title(site_name), "Reef") # 2
+    
+  temps_clean <- raw_data |> 
+    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    mutate(site = rep(site_name)) |> # 3
+    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = chron::times(as.numeric(decimal_time))) |> 
+    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  
+  return(temps_clean) 
+}
+```
+
+Rerun the updated function and try using it to make sure the appropriate site name is added to the `site_name` column for each of the data sets:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+```
+
 ## Version 4
+
+Fourth iteration goal: allow for uses to specify which temp variables (`Temp_top`, `Temp_mid`, `Temp_bot`) to keep
+6.  add default argument `include_temps`
+7.  update `select` to that it's flexible
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_df, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ # 6
+  
+  require(dplyr) 
+  require(tidyr)
+  require(stringr) 
+  require(chron)
+  require(naniar)
+  
+  # get site name as character string from object name (raw_df)
+  site_name <- deparse(substitute(raw_df)) 
+  site_name <- paste(str_to_title(site_name), "Reef")
+  
+  # 6 - columns to select 
+  standard_cols <- c("year", "month", "day", "decimal_time") # cols that are always selected
+  all_cols <- append(standard_cols, include_temps) # standard cols + temp cols that the user can choose to include (or not)
+  
+  temps_clean <- raw_df |> 
+    select(all_of(all_cols)) |> # ! https://tidyselect.r-lib.org/reference/all_of.html !
+    mutate(site = rep(site_name)) |> 
+    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = chron::times(as.numeric(decimal_time))) |> 
+    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+           year = as.factor(year),
+           month = as.factor(month),
+           day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) # 7 ! https://tidyselect.r-lib.org/reference/all_of.html !
+  
+  return(temps_clean) 
+}
+```
+
 ## Version 5
+
+Fifth iteration goal: add if else to evaluate data
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_df, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ # 6
+  
+  require(dplyr) 
+  require(tidyr)
+  require(stringr) 
+  require(chron)
+  require(naniar)
+  
+  # if data contains these colnames, clean the script
+  if(all(c("year", "month", "day", "decimal_time", "Temp_bot", "Temp_top", "Temp_mid") %in% colnames(raw_df))) { # ! !
+    
+    message("Cleaning data...")
+    
+    # get site name as character string from object name (raw_df)
+    site_name <- deparse(substitute(raw_df)) 
+    site_name <- paste(str_to_title(site_name), "Reef")
+    
+    # 6 - columns to select 
+    standard_cols <- c("year", "month", "day", "decimal_time") # cols that are always selected
+    all_cols <- append(standard_cols, include_temps) # standard cols + temp cols that the user can choose to include (or not)
+    
+    temps_clean <- raw_df |> 
+      select(all_of(all_cols)) |> # ! https://tidyselect.r-lib.org/reference/all_of.html !
+      mutate(site = rep(site_name)) |> 
+      unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = chron::times(as.numeric(decimal_time))) |> 
+      unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+      mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+             year = as.factor(year),
+             month = as.factor(month),
+             day = as.numeric(day)) |>
+      mutate(month_name = as.factor(month.name[month])) |>
+      replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) # 7 ! https://tidyselect.r-lib.org/reference/all_of.html !
+    
+    return(temps_clean) 
+    
+  } else {
+    
+    stop("The data frame provided does not include the necessary columns. Double check your data!")
+    
+  }
+  
+}
+```
 
 :::
 

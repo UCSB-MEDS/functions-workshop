@@ -1,0 +1,238 @@
+---
+format: html
+---
+
+It's helpful to first identify which parts of the cleaning code need to be generalized/made "flexible" so that any of our three data frames can be passed to it for cleaning. For us, that's:
+
+1.  the name of the raw data frame
+2.  the site name character string that's repeated for the length of the added `site` column
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- alegria |> # 1
+  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  filter(year %in% c(2005:2020)) |> 
+  mutate(site = rep("Alegria Reef")) |> # 2
+  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(as.numeric(decimal_time))) |> 
+  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+         year = as.factor(year),
+         month = as.factor(month),
+         day = as.numeric(day)) |>
+  mutate(month_name = as.factor(month.name[month])) |>
+  replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+```
+
+### **i.** Write a function to **clean** data sets
+
+Now we can start to build out our function. We'll start by creating a super basic function, then build in more complexity. I encourage you to test out your function after each version to ensure that it works as you intend it to.
+
+::: panel-tabset
+
+## Version 1 
+
+To start, let's create the skeleton of our function, which we'll call `clean_ocean_temps()`:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(){
+  
+}
+```
+
+Now, let's copy and paste our cleaning code for Alegria Reef data (from **Iteration 1**, above) into the body of the function (i.e. within the curly brackets, `{}`).
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(){
+ 
+  alegria_clean <- alegria |> 
+    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("Alegria Reef")) |> 
+    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(as.numeric(decimal_time))) |> 
+    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  
+}
+```
+
+Next, we want the ability to provide our function with any three of our data sets for processing. We'll do this following these steps: 
+
+1.  create an input (aka **argument**) called `raw_data` inside `function()` (NOTE: you can name your argument however you'd like, but preferably something short and descriptive) 
+2.  replace our hard-coded data frame name (e.g. `alegria` in the code above) in our cleaning pipeline with `raw_data`
+3.  update the name of the object we save our clean data to (currently `alegria_clean`) to something a bit more generalized, like `temps_clean` and `return()` our clean data frame object at the end
+
+::: {.callout-note collapse="true"}
+## What is `return()` and when is it necessary?
+
+Oftentimes, we want a function to do some processing on whatever we provide it and then give us back the result. We use the `return()` function to do this in R. 
+
+R **automatically** returns the the last output of a function -- here, it isn't necessary to `return(temps_clean)` since the `temps_clean` data frame is the last output of our `clean_ocean_temps()` function.  
+
+An explicit `return()` is used to return a value immediately from a function. If it is *not* the last statement of a function, `return()` will prematurely end the function -- for example, if `x = 2`, the string, `"Positive"` will be returned (and the remaining `if else` statement will not be executed):
+
+```{r}
+check_number <- function(x) {
+  if (x > 0) {
+    return("Positive")
+  }
+  else if (x < 0) {
+    return("Negative")
+  }
+  else {
+    return("Zero")
+  }
+}
+```
+
+I tend to include an explicit `return()` at the end of my functions because I think it makes it easier to read/understand the code, but check out [this interesting dialogue](https://stackoverflow.com/questions/11738823/explicitly-calling-return-in-a-function-or-not) on whether this is best practice or not.
+
+:::
+
+Recall that part of our cleaning pipeline includes adding a column called `site`, with repeating values that are the site name. For now, I'll just put some placeholder text (*___ Reef*) and we'll figure out how to make that text match up with the data in the next versions of our function. 
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data){ # step 1
+  
+  temps_clean <- raw_data |> # steps 2 & 3.1
+    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("___ Reef")) |> # added placeholder text here
+    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(as.numeric(decimal_time))) |> 
+    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  
+  return(temps_clean) # step 3.2
+}
+```
+
+Lastly, let's make sure our function works. Run your function so that it's saved to your global environment, then use it on your raw data sets:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+```
+
+## Version 2
+
+Before we get too far, it's probably a good idea to make sure any required dependencies are loaded with our function. A good way to check that your function works as-is is to restart R, reload your data and your function, then use your function:
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#......load in data using only the required packages (readr).....
+alegria <- readr::read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+mohawk <- readr::read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
+carpenteria <- readr::read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+
+#......................re-load your function.....................
+clean_ocean_temps <- function(raw_data){ 
+  
+  temps_clean <- raw_data |>
+    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("___ Reef")) |>
+    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(as.numeric(decimal_time))) |> 
+    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  
+  return(temps_clean) 
+}
+
+#....................try using your function.....................
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+```
+
+**Does it work?**
+
+If you're following along here, you most likely got an error message that says something like `...could not find function "select"`. We use lots of existing functions within `clean_ocean_temps()` that are called from external packages: `{dplyr}`, `{tidyr}`, `{chron}`, `{naniar}`. It's best not to assume that a user (including yourself) will have already installed and loaded those packages prior to trying to use `clean_ocean_temps()`. To fix this, we can call `library()` inside our function to load all required packages before executing our cleaning code. If a user tries to use `clean_ocean_names()` but doesn't have a required package(s) already installed, it will return an error (e.g. `Error in library(x): there is no package called 'x'`).
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data){ 
+  
+  library(dplyr)
+  library(tidyr)
+  library(chron)
+  library(naniar)
+  
+  temps_clean <- raw_data |>
+    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("___ Reef")) |>
+    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(as.numeric(decimal_time))) |> 
+    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  
+  return(temps_clean) 
+}
+```
+
+Again, rerun your updated function and try using it to make sure it works as intended:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+```
+
+## Version 3
+## Version 4
+## Version 5
+
+:::

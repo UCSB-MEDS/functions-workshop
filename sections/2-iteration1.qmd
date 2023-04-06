@@ -1,0 +1,191 @@
+---
+format: html
+---
+
+I (personally) find it absolutely critical to figure out how to clean/wrangle/tidy one data set on its own before I even begin thinking about writing a function. The data set I'm using contains *lots* of variables that I'm not interested in. Additionally....
+
+### **i.** Load libraries
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+library(tidyverse)
+library(chron)
+library(naniar)
+library(ggridges)
+```
+
+### **ii.** Import raw data 
+
+Either download from the [Environmental Data Portal](https://portal.edirepository.org/nis/home.jsp) (EDI) directly: 
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+# ale <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2008.14&entityid=15c25abf9bb72e2017301fa4e5b2e0d4")
+# mko <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2007.16&entityid=02629ecc08a536972dec021f662428aa")
+# car <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2004.26&entityid=1d7769e33145ba4f04aa0b0a3f7d4a76")
+```
+
+OR download files (they are large!) from [Google Drive](https://drive.google.com/drive/folders/1S2IY-qo29CU9ahRj_QNfFLfrh7DnT3CG?usp=share_link) and save to `data/raw_data/` (be sure to unzip them!):
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
+carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+```
+
+### **iii.** Clean data 
+
+Below, we select only the necessary columns (there are *far* too many (87) in the raw data), add a column for site name (the only way to tell which site the data were collected from is by looking at the file name), formatting dates/times, and replacing missing value codes with *`NA`*.
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- alegria |> 
+  
+  # keep only necessary columns & filter for years 2005-2020
+  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  filter(year %in% c(2005:2020)) |> 
+  
+  # add column with site name
+  mutate(site = rep("Alegria Reef")) |> 
+  
+  # create date time column
+  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(as.numeric(decimal_time))) |> 
+  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  
+  # coerce data types
+  mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+         year = as.factor(year),
+         month = as.factor(month),
+         day = as.numeric(day)) |>
+  
+  # add month name
+  mutate(month_name = as.factor(month.name[month])) |>
+  
+  # replace 9999s with NAs (will throw warning if var isn't present, but still execute)
+  replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+  
+  # select/reorder desired columns
+  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+
+```
+
+### **iv.** Plot the data
+
+Here, we create a ridgeline plot (using the `{ggridges}` package) showing aggregate bottom temperatures (2005-2020), by month, at Alegria reef.
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+alegria_plot <- alegria_clean |> 
+  
+  group_by(month_name) |> 
+  
+  ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+  geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+  scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+  scale_y_discrete(limits = rev(month.name)) + 
+  scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+  labs(x = "Bottom Temperature (°C)",
+       title = "Bottom Temperatures at Alegria Reef, Santa Barbara, CA",
+       subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
+  ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+  theme(
+    axis.title.y = element_blank()
+  )
+
+alegria_plot
+```
+
+If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the `mohawk` and `carpenteria` data frames) -- this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g. forgetting to update a data frame name, typos, etc.). If you'd like to check out the code for the `mohawk` and `carpenteria` data sets, unfold the code chunk below:
+
+```{r}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| layout-ncol: 2
+#| message: false
+#| warning: false
+
+#..........................Mohawk Reef...........................
+
+# clean
+mohawk_clean <- mohawk |> 
+  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  filter(year %in% c(2005:2020)) |> 
+  mutate(site = rep("Mohawk Reef")) |> 
+  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(as.numeric(decimal_time))) |> 
+  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+         year = as.factor(year),
+         month = as.factor(month),
+         day = as.numeric(day)) |>
+  mutate(month_name = as.factor(month.name[month])) |>
+  replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+
+# plot
+mohawk_plot <- mohawk_clean |> 
+  group_by(month_name) |> 
+  ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+  geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+  scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+  scale_y_discrete(limits = rev(month.name)) + 
+  scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+  labs(x = "Bottom Temperature (°C)",
+       title = "Bottom Temperatures at Mohawk Reef, Santa Barbara, CA",
+       subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
+  ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+  theme(
+    axis.title.y = element_blank()
+  )
+
+mohawk_plot
+
+#........................Carpenteria Reef........................
+
+# clean
+carpenteria_clean <- carpenteria |> 
+  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  filter(year %in% c(2005:2020)) |> 
+  mutate(site = rep("Carpenteria Reef")) |> 
+  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(as.numeric(decimal_time))) |> 
+  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+         year = as.factor(year),
+         month = as.factor(month),
+         day = as.numeric(day)) |>
+  mutate(month_name = as.factor(month.name[month])) |>
+  replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+
+# plot
+carpenteria_plot <- carpenteria_clean |> 
+  group_by(month_name) |> 
+  ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+  geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+  scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+  scale_y_discrete(limits = rev(month.name)) + 
+  scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+  labs(x = "Bottom Temperature (°C)",
+       title = "Bottom Temperatures at Carpenteria Reef, Santa Barbara, CA",
+       subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
+  ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+  theme(
+    axis.title.y = element_blank()
+  )
+
+carpenteria_plot
+```

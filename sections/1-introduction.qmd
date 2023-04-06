@@ -1,0 +1,13 @@
+---
+format: html
+---
+
+Some text about the benefits of using functions & for loops -- jumpinng into the deep end is challenging for anyone. important to make this an iterative process
+
+## `r fontawesome::fa("table", fill = "#5A5A5A", a11y = "sem")` About the Data
+
+Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpenteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
+
+  1. Alegria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14>
+  2. Mohawk Reef: <https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51>
+  3. Carpenteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>
