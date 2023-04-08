@@ -26,7 +26,7 @@ library(naniar)
 
 ## **Source functions**
 ```{r}
-source(here::here("my-functions", "clean_ocean_temps.R"))
+source(here::here("my-functions", "clean_ocean_temps2.R"))
 source(here::here("my-functions", "plot_ocean_temps.R"))
 ```
 
@@ -104,17 +104,17 @@ alegria_plot
 
 ## Use function to wrangle data
 ```{r}
-alegria_clean <- clean_ocean_temps(raw_df = alegria, include_temps = c("Temp_bot"))
-mohawk_clean <- clean_ocean_temps(raw_df = mohawk)
-carpenteria_clean <- clean_ocean_temps(raw_df = carpenteria, include_temps = c("Temp_mid", "Temp_bot"))
-# diamonds_clean <- clean_ocean_temps(df = diamonds) # example of data our function won't accept
+alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot"))
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria, include_temps = c("Temp_mid", "Temp_bot"))
+# diamonds_clean <- clean_ocean_temps(clean_data = diamonds) # example of data our function won't accept
 ```
 
 ## Use function to plot data
 ```{r}
-alegria_plot <- plot_ocean_temps(clean_df = alegria_clean)
-mohawk_plot <- plot_ocean_temps(clean_df = mohawk_clean)
-carpenteria_plot <- plot_ocean_temps(clean_df = carpenteria_clean)
+alegria_plot <- plot_ocean_temps(clean_data = alegria_clean)
+mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
+carpenteria_plot <- plot_ocean_temps(clean_data = carpenteria_clean)
 ```
 
 --------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ for (i in 1:length(temp_files)){
   message("Saving as: ", site_name)
   
   # read in csv and assign to our object name ----
-  assign(site_name, read_csv(here::here("data", "raw_data", file_name))) # ! https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop !
+  assign(site_name, readr::read_csv(here::here("data", "raw_data", file_name))) # ! https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop !
   
 }
 ```
