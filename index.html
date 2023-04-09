@@ -84,6 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data"><svg aria-label="table" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>table</title><path d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg> About the Data</a></li>
+  <li><a href="#how-is-this-document-organized" id="toc-how-is-this-document-organized" class="nav-link" data-scroll-target="#how-is-this-document-organized">How is this document organized?</a></li>
   <li><a href="#iteration-1-clean-and-plot-one-data-set" id="toc-iteration-1-clean-and-plot-one-data-set" class="nav-link" data-scroll-target="#iteration-1-clean-and-plot-one-data-set"><strong><svg aria-label="Person walking" role="img" viewbox="0 0 320 512" style="height:1em;width:0.62em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Person walking</title><path d="M256 48c0 26.5-21.5 48-48 48s-48-21.5-48-48s21.5-48 48-48s48 21.5 48 48zM126.5 199.3c-1 .4-1.9 .8-2.9 1.2l-8 3.5c-16.4 7.3-29 21.2-34.7 38.2l-2.6 7.8c-5.6 16.8-23.7 25.8-40.5 20.2s-25.8-23.7-20.2-40.5l2.6-7.8c11.4-34.1 36.6-61.9 69.4-76.5l8-3.5c20.8-9.2 43.3-14 66.1-14c44.6 0 84.8 26.8 101.9 67.9L281 232.7l21.4 10.7c15.8 7.9 22.2 27.1 14.3 42.9s-27.1 22.2-42.9 14.3L247 287.3c-10.3-5.2-18.4-13.8-22.8-24.5l-9.6-23-19.3 65.5 49.5 54c5.4 5.9 9.2 13 11.2 20.8l23 92.1c4.3 17.1-6.1 34.5-23.3 38.8s-34.5-6.1-38.8-23.3l-22-88.1-70.7-77.1c-14.8-16.1-20.3-38.6-14.7-59.7l16.9-63.5zM68.7 398l25-62.4c2.1 3 4.5 5.8 7 8.6l40.7 44.4-14.5 36.2c-2.4 6-6 11.5-10.6 16.1L54.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L68.7 398z"></path></svg> Iteration 1:</strong> Clean and plot <em>one</em> data set</a>
   <ul class="collapse">
   <li><a href="#i.-load-libraries" id="toc-i.-load-libraries" class="nav-link" data-scroll-target="#i.-load-libraries"><strong>i.</strong> Load libraries</a></li>
@@ -97,7 +98,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ii-write-a-function-to-plot-data-sets" id="toc-ii-write-a-function-to-plot-data-sets" class="nav-link" data-scroll-target="#ii-write-a-function-to-plot-data-sets"><strong>ii:</strong> Write a function to <strong>plot</strong> data sets</a></li>
   <li><a href="#iii-putting-it-all-together" id="toc-iii-putting-it-all-together" class="nav-link" data-scroll-target="#iii-putting-it-all-together"><strong>iii:</strong> Putting it all together</a></li>
   </ul></li>
-  <li><a href="#iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data" id="toc-iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data" class="nav-link" data-scroll-target="#iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data"><strong><svg aria-label="rocket" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>rocket</title><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-88.5c13-21.9 36.5-35.3 61.9-35.3l82.3 0c2.4-4 4.8-7.7 7.2-11.3C289.1-4.1 411.1-8.1 483.9 5.3c11.6 2.1 20.6 11.2 22.8 22.8c13.4 72.9 9.3 194.8-111.4 276.7c-3.5 2.4-7.3 4.8-11.3 7.2v82.3c0 25.4-13.4 49-35.3 61.9l-88.5 52.5c-7.4 4.4-16.6 4.5-24.1 .2s-12.1-12.2-12.1-20.9V380.8c-14.1 4.9-26.4 8.9-35.7 11.9c-11.2 3.6-23.4 .5-31.8-7.8zM384 168c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40z"></path></svg> Iteration 3:</strong> Write <code>for loop</code>s to read in, clean, and plot all your data</a></li>
+  <li><a href="#iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data" id="toc-iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data" class="nav-link" data-scroll-target="#iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data"><strong><svg aria-label="rocket" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>rocket</title><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-88.5c13-21.9 36.5-35.3 61.9-35.3l82.3 0c2.4-4 4.8-7.7 7.2-11.3C289.1-4.1 411.1-8.1 483.9 5.3c11.6 2.1 20.6 11.2 22.8 22.8c13.4 72.9 9.3 194.8-111.4 276.7c-3.5 2.4-7.3 4.8-11.3 7.2v82.3c0 25.4-13.4 49-35.3 61.9l-88.5 52.5c-7.4 4.4-16.6 4.5-24.1 .2s-12.1-12.2-12.1-20.9V380.8c-14.1 4.9-26.4 8.9-35.7 11.9c-11.2 3.6-23.4 .5-31.8-7.8zM384 168c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40z"></path></svg> Iteration 3:</strong> Write <code>for loop</code>s to read in, clean, and plot all your data</a>
+  <ul class="collapse">
+  <li><a href="#i.-write-a-for-loop-to-read-in-all-raw-data-files" id="toc-i.-write-a-for-loop-to-read-in-all-raw-data-files" class="nav-link" data-scroll-target="#i.-write-a-for-loop-to-read-in-all-raw-data-files"><strong>i.</strong> Write a <code>for loop</code> to <strong>read in</strong> all raw data files</a></li>
+  <li><a href="#ii.-write-a-for-loop-to-clean-all-data" id="toc-ii.-write-a-for-loop-to-clean-all-data" class="nav-link" data-scroll-target="#ii.-write-a-for-loop-to-clean-all-data"><strong>ii.</strong> Write a <code>for loop</code> to <strong>clean</strong> all data</a></li>
+  <li><a href="#iii.-write-a-for-loop-to-plot-all-data" id="toc-iii.-write-a-for-loop-to-plot-all-data" class="nav-link" data-scroll-target="#iii.-write-a-for-loop-to-plot-all-data"><strong>iii.</strong> Write a <code>for loop</code> to <strong>plot</strong> all data</a></li>
+  <li><a href="#iv.-putting-it-all-together" id="toc-iv.-putting-it-all-together" class="nav-link" data-scroll-target="#iv.-putting-it-all-together"><strong>iv.</strong> Putting it all together</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -145,13 +152,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data"><svg aria-label="table" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>table</title><path d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg> About the Data</h2>
 <p>The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in the coastal zone of Santa Barbara shores.</p>
-<p>Today, we’ll be exploring ocean temperature data from three coastal kelp forest sites within the Santa Barbra Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, and Carpenteria Reef.</p>
-<p>Let’s say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpenteria Reef. Data are collected by moored instrumentation (CTD &amp; ADCP) at each site. Raw data are available for download on the EDI Data Portal:</p>
+<p>Today, we’ll be exploring ocean temperature data from three coastal kelp forest sites within the Santa Barbra Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, and carpinteria Reef.</p>
+<p>Let’s say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpinteria Reef. Data are collected by moored instrumentation (CTD &amp; ADCP) at each site. Raw data are available for download on the EDI Data Portal:</p>
 <ol type="1">
 <li>Alegria Reef: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14" class="uri">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14</a></li>
 <li>Mohawk Reef: <a href="https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51" class="uri">https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51</a></li>
-<li>Carpenteria Reef: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26" class="uri">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26</a></li>
+<li>Carpinteria Reef: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26" class="uri">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26</a></li>
 </ol>
+</section>
+<section id="how-is-this-document-organized" class="level2">
+<h2 class="anchored" data-anchor-id="how-is-this-document-organized">How is this document organized?</h2>
 </section>
 <section id="iteration-1-clean-and-plot-one-data-set" class="level2">
 <h2 class="anchored" data-anchor-id="iteration-1-clean-and-plot-one-data-set"><strong><svg aria-label="Person walking" role="img" viewbox="0 0 320 512" style="height:1em;width:0.62em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Person walking</title><path d="M256 48c0 26.5-21.5 48-48 48s-48-21.5-48-48s21.5-48 48-48s48 21.5 48 48zM126.5 199.3c-1 .4-1.9 .8-2.9 1.2l-8 3.5c-16.4 7.3-29 21.2-34.7 38.2l-2.6 7.8c-5.6 16.8-23.7 25.8-40.5 20.2s-25.8-23.7-20.2-40.5l2.6-7.8c11.4-34.1 36.6-61.9 69.4-76.5l8-3.5c20.8-9.2 43.3-14 66.1-14c44.6 0 84.8 26.8 101.9 67.9L281 232.7l21.4 10.7c15.8 7.9 22.2 27.1 14.3 42.9s-27.1 22.2-42.9 14.3L247 287.3c-10.3-5.2-18.4-13.8-22.8-24.5l-9.6-23-19.3 65.5 49.5 54c5.4 5.9 9.2 13 11.2 20.8l23 92.1c4.3 17.1-6.1 34.5-23.3 38.8s-34.5-6.1-38.8-23.3l-22-88.1-70.7-77.1c-14.8-16.1-20.3-38.6-14.7-59.7l16.9-63.5zM68.7 398l25-62.4c2.1 3 4.5 5.8 7 8.6l40.7 44.4-14.5 36.2c-2.4 6-6 11.5-10.6 16.1L54.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L68.7 398z"></path></svg> Iteration 1:</strong> Clean and plot <em>one</em> data set</h2>
@@ -178,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>alegria <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"alegria_mooring_ale_20210617.csv"</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mohawk <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"mohawk_mooring_mko_20220330.csv"</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>carpenteria <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"carpinteria_mooring_car_20220330.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>carpinteria <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"carpinteria_mooring_car_20220330.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="iii.-clean-data" class="level3">
@@ -241,7 +251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the <code>mohawk</code> and <code>carpenteria</code> data frames) – this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g.&nbsp;forgetting to update a data frame name, typos, etc.). If you’d like to check out the code for the <code>mohawk</code> and <code>carpenteria</code> data sets, unfold the code chunk below:</p>
+<p>If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the <code>mohawk</code> and <code>carpinteria</code> data frames) – this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g.&nbsp;forgetting to update a data frame name, typos, etc.). If you’d like to check out the code for the <code>mohawk</code> and <code>carpinteria</code> data sets, unfold the code chunk below:</p>
 <div>
 <details>
 <summary>Code</summary>
@@ -280,13 +290,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>mohawk_plot</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#........................Carpenteria Reef........................</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#........................Carpinteria Reef........................</span></span>
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co"># clean</span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> carpenteria <span class="sc">|&gt;</span> </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> carpinteria <span class="sc">|&gt;</span> </span>
 <span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"decimal_time"</span>, <span class="st">"Temp_top"</span>, <span class="st">"Temp_mid"</span>, <span class="st">"Temp_bot"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2005</span><span class="sc">:</span><span class="dv">2020</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">rep</span>(<span class="st">"Carpenteria Reef"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">rep</span>(<span class="st">"Carpinteria Reef"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(date, year, month, day, <span class="at">sep =</span> <span class="st">"-"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">times</span>(<span class="fu">as.numeric</span>(decimal_time))) <span class="sc">|&gt;</span> </span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(date_time, date, time, <span class="at">sep =</span> <span class="st">" "</span>, <span class="at">remove =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
@@ -299,7 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"site"</span>, <span class="st">"date_time"</span>, <span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"month_name"</span>, <span class="st">"Temp_bot"</span>, <span class="st">"Temp_mid"</span>, <span class="st">"Temp_top"</span>)</span>
 <span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>carpenteria_plot <span class="ot">&lt;-</span> carpenteria_clean <span class="sc">|&gt;</span> </span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>carpinteria_plot <span class="ot">&lt;-</span> carpinteria_clean <span class="sc">|&gt;</span> </span>
 <span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month_name) <span class="sc">|&gt;</span> </span>
 <span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Temp_bot, <span class="at">y =</span> month_name, <span class="at">fill =</span> <span class="fu">after_stat</span>(x))) <span class="sc">+</span></span>
 <span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges_gradient</span>(<span class="at">rel_min_height =</span> <span class="fl">0.01</span>, <span class="at">scale =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
@@ -307,14 +317,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(month.name)) <span class="sc">+</span> </span>
 <span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#2C5374"</span>,<span class="st">"#778798"</span>, <span class="st">"#ADD8E6"</span>, <span class="st">"#EF8080"</span>, <span class="st">"#8B3A3A"</span>), <span class="at">name =</span> <span class="st">"Temp. (°C)"</span>) <span class="sc">+</span></span>
 <span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bottom Temperature (°C)"</span>,</span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Bottom Temperatures at Carpenteria Reef, Santa Barbara, CA"</span>,</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Bottom Temperatures at Carpinteria Reef, Santa Barbara, CA"</span>,</span>
 <span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Temperatures (°C) aggregated by month from 2005 - 2020"</span>) <span class="sc">+</span></span>
 <span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>  ggridges<span class="sc">::</span><span class="fu">theme_ridges</span>(<span class="at">font_size =</span> <span class="dv">13</span>, <span class="at">grid =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
 <span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>carpenteria_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>carpinteria_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -484,7 +494,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -493,7 +503,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#......load in data using only the required packages (readr).....</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>alegria <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"alegria_mooring_ale_20210617.csv"</span>))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>mohawk <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"mohawk_mooring_mko_20220330.csv"</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>carpenteria <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"carpinteria_mooring_car_20220330.csv"</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>carpinteria <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"carpinteria_mooring_car_20220330.csv"</span>))</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#......................re-load your function.....................</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>clean_ocean_temps <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_data){ </span>
@@ -521,7 +531,7 @@ What is <code>return()</code> and when is it necessary?
 <span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#....................try using your function.....................</span></span>
 <span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria)</span>
 <span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk)</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Does it work?</strong></p>
 <p>If you’re following along here, you most likely got an error message that says something like <code>...could not find function "select"</code>. We use lots of existing functions within <code>clean_ocean_temps()</code> that are called from external packages: <code>{dplyr}</code>, <code>{tidyr}</code>, <code>{chron}</code>, <code>{naniar}</code>. It’s best not to assume that a user (including yourself) will have already installed and loaded those packages prior to trying to use <code>clean_ocean_temps()</code>. To fix this, we can:</p>
@@ -569,7 +579,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
@@ -580,7 +590,7 @@ What is <code>return()</code> and when is it necessary?
 </ol>
 <p>Here, we’ll opt for option (b). To do so, we need to:</p>
 <ol type="1">
-<li>use the <code>deparse()</code> and <code>substitute()</code> functions together to convert an object name (here, <code>raw_data</code>) to a character string (this <a href="https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r">resource</a> was helpful for figuring this out)</li>
+<li>use the <code>deparse()</code> and <code>substitute()</code> functions together to convert an object name (here, <code>raw_data</code>) to a character string (<svg aria-label="Book open reader" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Book open reader</title><path d="M352 96c0 53-43 96-96 96s-96-43-96-96s43-96 96-96s96 43 96 96zM240 248V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"></path></svg> this <a href="https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r">resource</a> was helpful for figuring this out)</li>
 <li>format our extracted character string (convert to Title Case and paste <code>"Reef"</code> at the end)</li>
 <li>substitute our formatted character string site name in for the hard-coded site name in <code>mutate(site = rep("___ Reef"))</code></li>
 <li>don’t forget to import the <code>{stringr}</code> package at the top of your function!</li>
@@ -643,7 +653,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
@@ -698,7 +708,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_bot"</span>)) <span class="co"># includes only `Temp_bot`</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk) <span class="co"># includes all three temp cols (`Temp_top`, `Temp_mid`, `Temp_bot`) by default</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_mid"</span>, <span class="st">"Temp_bot"</span>)) <span class="co"># includes only `Temp_mid` &amp; `Temp_bot`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_mid"</span>, <span class="st">"Temp_bot"</span>)) <span class="co"># includes only `Temp_mid` &amp; `Temp_bot`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Note:</strong> <code>naniar::replace_with_na()</code> will throw a warning message (but does <em>not</em> halt execution) if one or more of the temperature variables are missing (e.g.&nbsp;if we specify <code>include_temps = c("Temp_bot")</code>, you will get a warning that says, <code>Missing from data: Temp_top, Temp_mid</code>).</p>
 </div>
@@ -762,7 +772,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># these three should work as intended</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_bot"</span>)) </span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk) </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_mid"</span>, <span class="st">"Temp_bot"</span>)) </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_mid"</span>, <span class="st">"Temp_bot"</span>)) </span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># this should throw an error!</span></span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>penguins_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> palmerpenguins<span class="sc">::</span>penguins) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -868,7 +878,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>alegria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> alegria_clean) </span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mohawk_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> mohawk_clean)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>carpenteria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> carpenteria_clean) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>carpinteria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> carpinteria_clean) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
@@ -912,7 +922,7 @@ What is <code>return()</code> and when is it necessary?
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>alegria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> alegria_clean) </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>mohawk_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> mohawk_clean)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>carpenteria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> carpenteria_clean) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>carpinteria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> carpinteria_clean) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -936,17 +946,17 @@ What is <code>return()</code> and when is it necessary?
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">#..........................import data...........................</span></span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>alegria <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"alegria_mooring_ale_20210617.csv"</span>))</span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>mohawk <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"mohawk_mooring_mko_20220330.csv"</span>))</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>carpenteria <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"carpinteria_mooring_car_20220330.csv"</span>))</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>carpinteria <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, <span class="st">"carpinteria_mooring_car_20220330.csv"</span>))</span>
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co">#...........................clean data...........................</span></span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>alegria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> alegria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_bot"</span>)) </span>
 <span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>mohawk_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> mohawk, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_bot"</span>)) </span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>carpenteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpenteria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_bot"</span>)) </span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>carpinteria_clean <span class="ot">&lt;-</span> <span class="fu">clean_ocean_temps</span>(<span class="at">raw_data =</span> carpinteria, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_bot"</span>)) </span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="co">#............................plot data...........................</span></span>
 <span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>alegria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> alegria_clean) </span>
 <span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>mohawk_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> mohawk_clean)</span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>carpenteria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> carpenteria_clean) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>carpinteria_plot <span class="ot">&lt;-</span> <span class="fu">plot_ocean_temps</span>(<span class="at">clean_data =</span> carpinteria_clean) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
@@ -1085,6 +1095,319 @@ Use a roxygen skeleton to document your function
 </section>
 <section id="iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data" class="level2">
 <h2 class="anchored" data-anchor-id="iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data"><strong><svg aria-label="rocket" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>rocket</title><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-88.5c13-21.9 36.5-35.3 61.9-35.3l82.3 0c2.4-4 4.8-7.7 7.2-11.3C289.1-4.1 411.1-8.1 483.9 5.3c11.6 2.1 20.6 11.2 22.8 22.8c13.4 72.9 9.3 194.8-111.4 276.7c-3.5 2.4-7.3 4.8-11.3 7.2v82.3c0 25.4-13.4 49-35.3 61.9l-88.5 52.5c-7.4 4.4-16.6 4.5-24.1 .2s-12.1-12.2-12.1-20.9V380.8c-14.1 4.9-26.4 8.9-35.7 11.9c-11.2 3.6-23.4 .5-31.8-7.8zM384 168c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40z"></path></svg> Iteration 3:</strong> Write <code>for loop</code>s to read in, clean, and plot all your data</h2>
+<p>What is a for loop? ___</p>
+<p>Learn more about iteration and writing <code>for loops</code> in R in <a href="https://r4ds.had.co.nz/iteration.html">Ch 21 of R for Data Science</a>, by Hadley Wickham.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="media/forloop.jpeg" class="img-fluid figure-img" alt="Illustrated for loop example. Input vector is a parade of monsters, including monsters that are circles, triangles, and squares. The for loop they enter has an if-else statement: if the monster is a triangle, it gets sunglasses. Otherwise, it gets a hat. The output is the parade of monsters where the same input parade of monsters shows up, now wearing either sunglasses (if triangular) or a hat (if any other shape)." width="2048"></p>
+</figure>
+</div>
+</div>
+</div>
+<center>
+<span style="color: #959494;">Art by <a href="https://allisonhorst.com/">Allison Horst</a></span>
+</center>
+<section id="i.-write-a-for-loop-to-read-in-all-raw-data-files" class="level3">
+<h3 class="anchored" data-anchor-id="i.-write-a-for-loop-to-read-in-all-raw-data-files"><strong>i.</strong> Write a <code>for loop</code> to <strong>read in</strong> all raw data files</h3>
+<p>ADD NOTE ABOUT TESTING FOR LOOPS BY SETTING i = 1</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Step 1:</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Step 2:</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Step 3:</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<ol type="1">
+<li>get list of files that you want to work with</li>
+<li>create the skeleton of a <code>for loop</code> to iterate over that list of files</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of temperature files ----</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>temp_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"data/raw_data"</span>, <span class="at">pattern =</span> <span class="st">".csv"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop to read in each file ---</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(temp_files)){</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<ol type="1">
+<li>create object name that your data will be saved to (<svg aria-label="Book open reader" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Book open reader</title><path d="M352 96c0 53-43 96-96 96s-96-43-96-96s43-96 96-96s96 43 96 96zM240 248V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"></path></svg> I learned how to do this by referencing the <a href="https://stringr.tidyverse.org/reference/str_split.html"><code>{stringr}</code> documentation</a>)</li>
+<li>add some helpful messages so you can more easily check progress</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of temperature files ----</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>temp_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"data/raw_data"</span>, <span class="at">pattern =</span> <span class="st">".csv"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop to read in each file ---</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(temp_files)){</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get object name from file name ----</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> temp_files[i]</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Reading in: "</span>, file_name)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  split_name <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split_1</span>(file_name, <span class="st">"_"</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  site_name <span class="ot">&lt;-</span> split_name[<span class="dv">1</span>] </span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Saving as: "</span>, site_name)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<ol type="1">
+<li>assign the read-in data to the object name (<svg aria-label="Book open reader" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Book open reader</title><path d="M352 96c0 53-43 96-96 96s-96-43-96-96s43-96 96-96s96 43 96 96zM240 248V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"></path></svg> I used <a href="https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop">this resource</a> to remind myself how to do this)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of temperature files ----</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>temp_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="st">"data/raw_data"</span>, <span class="at">pattern =</span> <span class="st">".csv"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop to read in each file ---</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(temp_files)){</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get object name from file name ----</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> temp_files[i]</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Reading in: "</span>, file_name)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  split_name <span class="ot">&lt;-</span> stringr<span class="sc">::</span><span class="fu">str_split_1</span>(file_name, <span class="st">"_"</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  site_name <span class="ot">&lt;-</span> split_name[<span class="dv">1</span>] </span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"Saving as: "</span>, site_name)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># read in csv and assign to our object name ----</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(site_name, readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw_data"</span>, file_name))) </span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="ii.-write-a-for-loop-to-clean-all-data" class="level3">
+<h3 class="anchored" data-anchor-id="ii.-write-a-for-loop-to-clean-all-data"><strong>ii.</strong> Write a <code>for loop</code> to <strong>clean</strong> all data</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Step 1:</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Step 2:</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Intermediate Step:</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false" href="">Step 3:</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<ol type="1">
+<li>create a vector of data frame names that you want to clean</li>
+<li>create skeleton of your for loop to iterate over that vector of names</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of dfs to clean ----</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"alegria"</span>, <span class="st">"carpinteria"</span>, <span class="st">"mohawk"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop to clean dfs using `clean_ocean_temps()` ----</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(raw_data)) {</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<ol type="1">
+<li>create object name to save the cleaned data frame to</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of dfs to clean ----</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"alegria"</span>, <span class="st">"carpinteria"</span>, <span class="st">"mohawk"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop to clean dfs using `clean_ocean_temps()` ----</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(raw_data)) {</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get df ----</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"cleaning df"</span>, i, <span class="st">": -------- "</span>, raw_data[i], <span class="st">" --------"</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get</span>(raw_data[i])  <span class="co"># ! https://community.rstudio.com/t/loop-through-all-dfs-in-environment/70943 !</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new name ----</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  df_name <span class="ot">&lt;-</span> raw_data[i]</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  df_clean_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df_name, <span class="st">"_clean"</span>)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"New df will be named: "</span>, df_clean_name)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<ol type="1">
+<li>figure out how to call objects from the environment using variable names (<svg aria-label="Book open reader" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Book open reader</title><path d="M352 96c0 53-43 96-96 96s-96-43-96-96s43-96 96-96s96 43 96 96zM240 248V512l-48.4-24.2c-20.9-10.4-43.5-17-66.8-19.3l-96-9.6C12.5 457.2 0 443.5 0 427V224c0-17.7 14.3-32 32-32H62.3c63.6 0 125.6 19.6 177.7 56zm32 264V248c52.1-36.4 114.1-56 177.7-56H480c17.7 0 32 14.3 32 32V427c0 16.4-12.5 30.2-28.8 31.8l-96 9.6c-23.2 2.3-45.9 8.9-66.8 19.3L272 512z"></path></svg> I referenced <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get">this resource</a>)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of dfs to clean ----</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"alegria"</span>, <span class="st">"carpinteria"</span>, <span class="st">"mohawk"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># call an object from environment ----</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">get</span>(raw_data[<span class="dv">1</span>]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-5-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-4-tab">
+<ol type="1">
+<li>assign the cleaned data frame to the object name, <code>df_clean_name</code> (just as we did when we read in data earlier)</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get list of dfs to clean ----</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"alegria"</span>, <span class="st">"carpinteria"</span>, <span class="st">"mohawk"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for loop to clean dfs using `clean_ocean_temps()` ----</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(raw_data)) {</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print message ----</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"cleaning df "</span>, i, <span class="st">": -------- "</span>, raw_data[i], <span class="st">" --------"</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create new df name ----</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  df_name <span class="ot">&lt;-</span> raw_data[i]</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  df_clean_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(df_name, <span class="st">"_clean"</span>)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"New df will be named: "</span>, df_clean_name)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># clean data ----</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(df_clean_name, <span class="fu">clean_ocean_temps</span>(<span class="at">df =</span> <span class="fu">get</span>(raw_data[i]), <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_top"</span>, <span class="st">"Temp_bot"</span>)))</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"------------------------------------"</span>)</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="iii.-write-a-for-loop-to-plot-all-data" class="level3">
+<h3 class="anchored" data-anchor-id="iii.-write-a-for-loop-to-plot-all-data"><strong>iii.</strong> Write a <code>for loop</code> to <strong>plot</strong> all data</h3>
+</section>
+<section id="iv.-putting-it-all-together" class="level3">
+<h3 class="anchored" data-anchor-id="iv.-putting-it-all-together"><strong>iv.</strong> Putting it all together</h3>
+<p>Okay, now let’s bring all these pieces together! Our revised scripts might look something like this:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href=""><code>my_analysis.R</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href=""><code>R/clean_ocean_temps.R</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href=""><code>R/plot_ocean_temps.R</code></a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Use a roxygen skeleton to document your function
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Even if you don’t plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation – the <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html"><code>{roxygen2}</code></a> package helps to make that process easier. Click anywhere inside your function, then choose Code &gt; Insert Roxygen Skeleton to get started.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Process CDT/ADCP temperature data</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param raw_data data frame of CTD/ADCP data collected at SBC LTER site moorings; search for data on the EDI Data Portal (http://portal.edirepository.org:80/nis/simpleSearch?defType=edismax&amp;q=SBC+LTER%5C%3A+Ocean%5C%3A+Currents+and+Biogeochemistry%5C%3A+Moored+CTD+and+ADCP+data&amp;fq=-scope:ecotrends&amp;fq=-scope:lter-landsat*&amp;fl=id,packageid,title,author,organization,pubdate,coordinates&amp;debug=false)</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param include_temps vector of character strings that includes one or more of the following variable names: Temp_top, Temp_mid, Temp_top</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return a data frame</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' my_clean_df &lt;- clean_ocean_temps(raw_data = my_raw_df, include_temps = c("Temp_bot"))</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>clean_ocean_temps <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_data, <span class="at">include_temps =</span> <span class="fu">c</span>(<span class="st">"Temp_top"</span>, <span class="st">"Temp_mid"</span>, <span class="st">"Temp_bot"</span>)){ </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># load dependencies ----</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr) </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stringr) </span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(chron)</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(naniar)</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if data contains these colnames, clean the script</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">all</span>(<span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"decimal_time"</span>, <span class="st">"Temp_bot"</span>, <span class="st">"Temp_top"</span>, <span class="st">"Temp_mid"</span>) <span class="sc">%in%</span> <span class="fu">colnames</span>(raw_data))) { </span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Cleaning data..."</span>) </span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get site name as character string from object (raw_data) name ----</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>    site_name <span class="ot">&lt;-</span> <span class="fu">deparse</span>(<span class="fu">substitute</span>(raw_data)) </span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>    site_name <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">str_to_title</span>(site_name), <span class="st">"Reef"</span>) </span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># columns to select ----</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>    standard_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"decimal_time"</span>) </span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>    all_cols <span class="ot">&lt;-</span> <span class="fu">append</span>(standard_cols, include_temps) </span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># clean data ----</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>    temps_clean <span class="ot">&lt;-</span> raw_data <span class="sc">|&gt;</span> </span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="fu">all_of</span>(all_cols)) <span class="sc">|&gt;</span> </span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2005</span><span class="sc">:</span><span class="dv">2020</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">site =</span> <span class="fu">rep</span>(site_name)) <span class="sc">|&gt;</span> </span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unite</span>(date, year, month, day, <span class="at">sep =</span> <span class="st">"-"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">time =</span> chron<span class="sc">::</span><span class="fu">times</span>(<span class="fu">as.numeric</span>(decimal_time))) <span class="sc">|&gt;</span> </span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unite</span>(date_time, date, time, <span class="at">sep =</span> <span class="st">" "</span>, <span class="at">remove =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">date_time =</span> <span class="fu">as.POSIXct</span>(date_time, <span class="st">"%Y-%m-%d %H:%M:%S"</span>, <span class="at">tz =</span> <span class="st">"GMT"</span>),</span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>             <span class="at">year =</span> <span class="fu">as.factor</span>(year),</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>             <span class="at">month =</span> <span class="fu">as.factor</span>(month),</span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>             <span class="at">day =</span> <span class="fu">as.numeric</span>(day)) <span class="sc">|&gt;</span></span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">month_name =</span> <span class="fu">as.factor</span>(month.name[month])) <span class="sc">|&gt;</span></span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">Temp_bot =</span> <span class="dv">9999</span>, <span class="at">Temp_top =</span> <span class="dv">9999</span>, <span class="at">Temp_mid =</span> <span class="dv">9999</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="fu">any_of</span>(<span class="fu">c</span>(<span class="st">"site"</span>, <span class="st">"date_time"</span>, <span class="st">"year"</span>, <span class="st">"month"</span>, <span class="st">"day"</span>, <span class="st">"month_name"</span>, <span class="st">"Temp_bot"</span>, <span class="st">"Temp_mid"</span>, <span class="st">"Temp_top"</span>))) </span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># return cleaned df ----</span></span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(temps_clean) </span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> { </span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"The data frame provided does not include the necessary columns. Double check your data!"</span>) </span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Use a roxygen skeleton to document your function
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Even if you don’t plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation – the <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html"><code>{roxygen2}</code></a> package helps to make that process easier. Click anywhere inside your function, then choose Code &gt; Insert Roxygen Skeleton to get started.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Create ridge line plot of CDT/ADCP bottom temperature data</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param clean_data a data frame that has been pre-processed using clean_ocean_temp()</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return a plot object</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' my_plot &lt;- plot_ocean_temps(clean_data = my_clean_df)</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>plot_ocean_temps <span class="ot">&lt;-</span> <span class="cf">function</span>(clean_data) { </span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># load dependencies ----</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggplot2)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggridges)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get site name for plot title ----</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>  site_name <span class="ot">&lt;-</span> <span class="fu">unique</span>(clean_data<span class="sc">$</span>site)</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># plot data ----</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  temp_plot <span class="ot">&lt;-</span> clean_data <span class="sc">|&gt;</span> </span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(month_name) <span class="sc">|&gt;</span> </span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Temp_bot, <span class="at">y =</span> month_name, <span class="at">fill =</span> <span class="fu">after_stat</span>(x))) <span class="sc">+</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    ggridges<span class="sc">::</span><span class="fu">geom_density_ridges_gradient</span>(<span class="at">rel_min_height =</span> <span class="fl">0.01</span>, <span class="at">scale =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">18</span>, <span class="dv">21</span>)) <span class="sc">+</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(month.name)) <span class="sc">+</span> </span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradientn</span>(<span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#2C5374"</span>,<span class="st">"#778798"</span>, <span class="st">"#ADD8E6"</span>, <span class="st">"#EF8080"</span>, <span class="st">"#8B3A3A"</span>), <span class="at">name =</span> <span class="st">"Temp. (°C)"</span>) <span class="sc">+</span></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Bottom Temperature (°C)"</span>,</span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Bottom Temperatures at"</span>,  site_name, <span class="st">", Santa Barbara, CA"</span>), <span class="co"># 2</span></span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="st">"Temperatures (°C) aggregated by month from 2005 - 2022"</span>) <span class="sc">+</span></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>    ggridges<span class="sc">::</span><span class="fu">theme_ridges</span>(<span class="at">font_size =</span> <span class="dv">13</span>, <span class="at">grid =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return plot ----</span></span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(temp_plot)</span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
 </main>

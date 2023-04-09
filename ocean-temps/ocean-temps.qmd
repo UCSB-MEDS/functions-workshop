@@ -5,34 +5,32 @@ editor_options:
   chunk_output_type: console
 ---
 
-Approach:
-1. wrangle 1 data set
-2. turn into basic function
-3. add if else to check that required columns are present in data
-4. add arg that allows you to pick which temp cols to include (with default value)
-5. for loop to process all raw data & combine them into a single file
+Approach: 1. wrangle 1 data set 2. turn into basic function 3. add if else to check that required columns are present in data 4. add arg that allows you to pick which temp cols to include (with default value) 5. for loop to process all raw data & combine them into a single file
 
-Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpenteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
+Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpinteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
 
-  1. Alegria Reef: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14
-  2. Mohawk Reef: https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51
-  3. Carpenteria Reef: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26
-  
+1.  Alegria Reef: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14
+2.  Mohawk Reef: https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51
+3.  Carpinteria Reef: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26
+
 ## **Load libraries**
+
 ```{r}
 library(tidyverse)
 library(naniar)
 ```
 
 ## **Source functions**
+
 ```{r}
 source(here::here("my-functions", "clean_ocean_temps2.R"))
 source(here::here("my-functions", "plot_ocean_temps.R"))
 ```
 
-## **Import raw data** 
+## **Import raw data**
 
-### Either download from EDI directly: 
+### Either download from EDI directly:
+
 ```{r}
 # ale <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2008.14&entityid=15c25abf9bb72e2017301fa4e5b2e0d4")
 # mko <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2007.16&entityid=02629ecc08a536972dec021f662428aa")
@@ -40,13 +38,15 @@ source(here::here("my-functions", "plot_ocean_temps.R"))
 ```
 
 ## OR download files (they are large!) from Google Drive and save to `data/raw_data/sbc_lter_temps`
+
 ```{r}
 alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
 mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
-carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 ```
 
-## clean data 
+## clean data
+
 ```{r}
 alegria_clean <- alegria |> 
   
@@ -79,6 +79,7 @@ alegria_clean <- alegria |>
 ```
 
 ## plot data
+
 ```{r}
 alegria_plot <- alegria_clean |> 
   
@@ -100,27 +101,29 @@ alegria_plot <- alegria_clean |>
 alegria_plot
 ```
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 ## Use function to wrangle data
+
 ```{r}
 alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot"))
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria, include_temps = c("Temp_mid", "Temp_bot"))
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_mid", "Temp_bot"))
 # diamonds_clean <- clean_ocean_temps(clean_data = diamonds) # example of data our function won't accept
 ```
 
 ## Use function to plot data
+
 ```{r}
 alegria_plot <- plot_ocean_temps(clean_data = alegria_clean)
 mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
-carpenteria_plot <- plot_ocean_temps(clean_data = carpenteria_clean)
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean)
 ```
 
---------------------------------------------------------------------------------
-
+------------------------------------------------------------------------
 
 ## for loop to read in all data
+
 ```{r}
 # get list of temperature files ----
 temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
@@ -131,7 +134,7 @@ for (i in 1:length(temp_files)){
   # get object name from file name ----
   file_name <- temp_files[i]
   message("Reading in: ", file_name)
-  split_name <- str_split_1(file_name, "_") # ! https://stringr.tidyverse.org/reference/str_split.html !
+  split_name <- stringr::str_split_1(file_name, "_") # ! https://stringr.tidyverse.org/reference/str_split.html !
   site_name <- split_name[1] 
   message("Saving as: ", site_name)
   
@@ -142,10 +145,12 @@ for (i in 1:length(temp_files)){
 ```
 
 ## Iteration 1: for loop to clean all data
+
 First need to figure out how to call in objects from environment
+
 ```{r}
 # get list of dfs to clean ----
-raw_data <- c("alegria", "carpenteria", "mohawk")
+raw_data <- c("alegria", "carpinteria", "mohawk")
 
 # for loop to clean dfs using `clean_ocean_temps()`
 for (i in 1:length(raw_data)) {
@@ -163,29 +168,52 @@ for (i in 1:length(raw_data)) {
 ```
 
 ## Iteration 2: for loop to clean all data & assign to inutitive object name
+
 ```{r}
 # get list of dfs to clean ----
-raw_data <- c("alegria", "carpenteria", "mohawk")
+raw_df <- c("alegria", "carpinteria", "mohawk")
 
 # first need to figure out how to call objects from environment
-get(raw_data[1]) # calls first element in vector, `raw_data` 
+# get(raw_data[i]) # calls first element in vector, `raw_data` 
 
 # for loop to clean dfs using `clean_ocean_temps()`
-for (i in 1:length(raw_data)) {
+for (i in 1:length(raw_df)) {
   
   # print message ----
-  message("cleaning df ", i, ": -------- ", raw_data[i], " --------")
+  message("cleaning df ", i, ": ------ ", raw_df[i], " ------")
   
   # create new df name ----
-  df_name <- raw_data[i]
-  df_clean_name <- paste0(df_name, "_clean")
+  raw_df_name <- raw_df[i]
+  df_clean_name <- paste0(raw_df_name, "_clean")
   message("New df will be named: ", df_clean_name)
   
   # clean data ----
-  assign(df_clean_name, clean_ocean_temps(df = get(raw_data[i]), include_temps = c("Temp_top", "Temp_bot")))
+  assign(df_clean_name, clean_ocean_temps(raw_data = get(raw_df[i]), include_temps = c("Temp_top", "Temp_bot")))
   
   message("------------------------------------")
 }
 ```
 
 ## for loop to plot all data
+
+```{r}
+# get list of clean df names
+clean_df <- c("alegria_clean", "carpinteria_clean", "mohawk_clean")
+
+for (i in 1:length(clean_df)) {
+  
+  # print message ----
+  message("plotting df ", i, ": -------- ", clean_df[i], " --------")
+  
+  # create plot name ----
+  clean_df_name <- clean_df[i]
+  site_name <- stringr::str_split_1(clean_df_name, "_")[1]
+  plot_name <- paste0(site_name, "_plot")
+  
+  # plot data ----
+  assign(plot_name, plot_ocean_temps(clean_data = get(clean_df[i])))
+  
+}
+
+```
+

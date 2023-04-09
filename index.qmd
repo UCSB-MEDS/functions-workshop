@@ -24,13 +24,15 @@ create a github repo, add downloaded data, foldering structure
 
 The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in the coastal zone of Santa Barbara shores.
 
-Today, we'll be exploring ocean temperature data from three coastal kelp forest sites within the Santa Barbra Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, and Carpenteria Reef. 
+Today, we'll be exploring ocean temperature data from three coastal kelp forest sites within the Santa Barbra Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, and carpinteria Reef. 
 
-Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpenteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
+Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpinteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
 
   1. Alegria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14>
   2. Mohawk Reef: <https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51>
-  3. Carpenteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>
+  3. Carpinteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>
+  
+## How is this document organized?
 
 ## **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Iteration 1:** Clean and plot *one* data set 
 
@@ -71,7 +73,7 @@ OR download files (they are large!) from [Google Drive](https://drive.google.com
 #| warning: false
 alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
 mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
-carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 ```
 
 ### **iii.** Clean data 
@@ -141,7 +143,7 @@ alegria_plot <- alegria_clean |>
 alegria_plot
 ```
 
-If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the `mohawk` and `carpenteria` data frames) -- this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g. forgetting to update a data frame name, typos, etc.). If you'd like to check out the code for the `mohawk` and `carpenteria` data sets, unfold the code chunk below:
+If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the `mohawk` and `carpinteria` data frames) -- this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g. forgetting to update a data frame name, typos, etc.). If you'd like to check out the code for the `mohawk` and `carpinteria` data sets, unfold the code chunk below:
 
 ```{r}
 #| eval: true
@@ -187,13 +189,13 @@ mohawk_plot <- mohawk_clean |>
 
 mohawk_plot
 
-#........................Carpenteria Reef........................
+#........................Carpinteria Reef........................
 
 # clean
-carpenteria_clean <- carpenteria |> 
+carpinteria_clean <- carpinteria |> 
   select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
   filter(year %in% c(2005:2020)) |> 
-  mutate(site = rep("Carpenteria Reef")) |> 
+  mutate(site = rep("Carpinteria Reef")) |> 
   unite(date, year, month, day, sep = "-", remove = FALSE) |> 
   mutate(time = times(as.numeric(decimal_time))) |> 
   unite(date_time, date, time, sep = " ", remove = TRUE) |> 
@@ -206,7 +208,7 @@ carpenteria_clean <- carpenteria |>
   select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
 
 # plot
-carpenteria_plot <- carpenteria_clean |> 
+carpinteria_plot <- carpinteria_clean |> 
   group_by(month_name) |> 
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
   geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
@@ -214,14 +216,14 @@ carpenteria_plot <- carpenteria_clean |>
   scale_y_discrete(limits = rev(month.name)) + 
   scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
   labs(x = "Bottom Temperature (°C)",
-       title = "Bottom Temperatures at Carpenteria Reef, Santa Barbara, CA",
+       title = "Bottom Temperatures at Carpinteria Reef, Santa Barbara, CA",
        subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
   ggridges::theme_ridges(font_size = 13, grid = TRUE) +
   theme(
     axis.title.y = element_blank()
   )
 
-carpenteria_plot
+carpinteria_plot
 ```
 
 ## **`r fontawesome::fa("person-running", fill = "#5A5A5A", a11y = "sem")` Iteration 2:** Write functions to clean & plot your data
@@ -373,7 +375,7 @@ Lastly, let's make sure our function works. Run your function so that it's saved
 #| warning: false
 alegria_clean <- clean_ocean_temps(raw_data = alegria)
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
 ```
 
 ## Version 2
@@ -388,7 +390,7 @@ Before we get too far, it's probably a good idea to make sure any required depen
 #......load in data using only the required packages (readr).....
 alegria <- readr::read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
 mohawk <- readr::read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
-carpenteria <- readr::read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+carpinteria <- readr::read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 
 #......................re-load your function.....................
 clean_ocean_temps <- function(raw_data){ 
@@ -416,7 +418,7 @@ clean_ocean_temps <- function(raw_data){
 #....................try using your function.....................
 alegria_clean <- clean_ocean_temps(raw_data = alegria)
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
 ```
 
 **Does it work?**
@@ -468,7 +470,7 @@ Again, rerun your updated function and try using it to make sure it works as int
 #| warning: false
 alegria_clean <- clean_ocean_temps(raw_data = alegria)
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
 ```
 
 ## Version 3
@@ -480,7 +482,7 @@ b. getting the site name from the raw data object name (e.g. the data `alegria_m
 
 Here, we'll opt for option (b). To do so, we need to: 
 
-1. use the `deparse()` and `substitute()` functions together to convert an object name (here, `raw_data`) to a character string (this [resource](https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r ) was helpful for figuring this out)
+1. use the `deparse()` and `substitute()` functions together to convert an object name (here, `raw_data`) to a character string (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` this [resource](https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r ) was helpful for figuring this out)
 2.  format our extracted character string (convert to Title Case and paste `"Reef"` at the end)
 3.  substitute our formatted character string site name in for the hard-coded site name in `mutate(site = rep("___ Reef"))`
 4.  don't forget to import the `{stringr}` package at the top of your function!
@@ -535,7 +537,7 @@ Rerun the updated function and try using it to make sure the appropriate site na
 #| warning: false
 alegria_clean <- clean_ocean_temps(raw_data = alegria)
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
 ```
 
 ## Version 4
@@ -599,7 +601,7 @@ Rerun the updated function and try out our new `inlcude_temps` argument:
 #| warning: false
 alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot")) # includes only `Temp_bot`
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk) # includes all three temp cols (`Temp_top`, `Temp_mid`, `Temp_bot`) by default
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria, include_temps = c("Temp_mid", "Temp_bot")) # includes only `Temp_mid` & `Temp_bot`
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_mid", "Temp_bot")) # includes only `Temp_mid` & `Temp_bot`
 ```
 
 **Note:** `naniar::replace_with_na()` will throw a warning message (but does *not* halt execution) if one or more of the temperature variables are missing (e.g. if we specify `include_temps = c("Temp_bot")`, you will get a warning that says, `Missing from data: Temp_top, Temp_mid`).
@@ -673,7 +675,7 @@ Let's rerun our function and try it out one last time:
 # these three should work as intended
 alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot")) 
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk) 
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria, include_temps = c("Temp_mid", "Temp_bot")) 
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_mid", "Temp_bot")) 
 
 # this should throw an error!
 penguins_clean <- clean_ocean_temps(raw_data = palmerpenguins::penguins) 
@@ -759,7 +761,6 @@ Just like in `clean_ocean_temps()`, we want the ability to provide our function 
 3.  update the name of the object we save our plot output to (currently `alegria_plot`) to something a bit more generalized, like `temps_plot` and `return()` our plot object at the end
 4. don't forget to load any dependencies within the function!
 5. and add some placeholder text (*___ Reef*) in the `title` field -- we'll make this flexible in our next version
-
 ```{r}
 #| eval: false
 #| echo: true
@@ -802,7 +803,7 @@ Now let's make sure our function works. Run the function so that it's saved to o
 #| warning: false
 alegria_plot <- plot_ocean_temps(clean_data = alegria_clean) 
 mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
-carpenteria_plot <- plot_ocean_temps(clean_data = carpenteria_clean) 
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean) 
 ```
 
 ## Version 2
@@ -811,7 +812,6 @@ In this next version, let's figure out how to update the `title` so that the app
 
 1. use the `unique()` function to get the site name for a given data set
 2. use the `paste()` function to construct a `title` using our extracted site name
-
 ```{r}
 #| eval: false
 #| echo: true
@@ -856,7 +856,7 @@ Rerun and try out your function again to make sure it works as expected:
 #| warning: false
 alegria_plot <- plot_ocean_temps(clean_data = alegria_clean) 
 mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
-carpenteria_plot <- plot_ocean_temps(clean_data = carpenteria_clean) 
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean) 
 ```
 :::
 
@@ -881,17 +881,17 @@ source("R/plot_ocean_temps.R")
 #..........................import data...........................
 alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
 mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
-carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 
 #...........................clean data...........................
 alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot")) 
 mohawk_clean <- clean_ocean_temps(raw_data = mohawk, include_temps = c("Temp_bot")) 
-carpenteria_clean <- clean_ocean_temps(raw_data = carpenteria, include_temps = c("Temp_bot")) 
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_bot")) 
 
 #............................plot data...........................
 alegria_plot <- plot_ocean_temps(clean_data = alegria_clean) 
 mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
-carpenteria_plot <- plot_ocean_temps(clean_data = carpenteria_clean) 
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean) 
 ```
 
 ## `R/clean_ocean_temps.R`
@@ -1018,5 +1018,343 @@ plot_ocean_temps <- function(clean_data) {
 ```
 
 :::
+
 ## **`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Iteration 3:** Write `for loop`s to read in, clean, and plot all your data
+
+What is a for loop? ___
+
+Learn more about iteration and writing `for loops` in R in [Ch 21 of R for Data Science](https://r4ds.had.co.nz/iteration.html), by Hadley Wickham.
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: center
+#| fig-alt: "Illustrated for loop example. Input vector is a parade of monsters, including monsters that are circles, triangles, and squares. The for loop they enter has an if-else statement: if the monster is a triangle, it gets sunglasses. Otherwise, it gets a hat. The output is the parade of monsters where the same input parade of monsters shows up, now wearing either sunglasses (if triangular) or a hat (if any other shape)."
+knitr::include_graphics("media/forloop.jpeg")
+```
+
+<center><span style="color: #959494;">Art by [Allison Horst](https://allisonhorst.com/)</span></center>
+
+### **i.** Write a `for loop` to **read in** all raw data files
+
+ADD NOTE ABOUT TESTING FOR LOOPS BY SETTING i = 1
+
+::: panel-tabset
+
+## Step 1:
+
+1.  get list of files that you want to work with
+2.  create the skeleton of a `for loop` to iterate over that list of files
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of temperature files ----
+temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
+
+# for loop to read in each file ---
+for (i in 1:length(temp_files)){
+  
+}
+```
+
+## Step 2: 
+
+1.  create object name that your data will be saved to (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I learned how to do this by referencing the [`{stringr}` documentation](https://stringr.tidyverse.org/reference/str_split.html))
+2.  add some helpful messages so you can more easily check progress
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of temperature files ----
+temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
+
+# for loop to read in each file ---
+for (i in 1:length(temp_files)){
+  
+  # get object name from file name ----
+  file_name <- temp_files[i]
+  message("Reading in: ", file_name)
+  split_name <- stringr::str_split_1(file_name, "_")
+  site_name <- split_name[1] 
+  message("Saving as: ", site_name)
+  
+}
+```
+
+## Step 3:
+
+1.  assign the read-in data to the object name (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I used [this resource](https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop) to remind myself how to do this)
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of temperature files ----
+temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
+
+# for loop to read in each file ---
+for (i in 1:length(temp_files)){
+  
+  # get object name from file name ----
+  file_name <- temp_files[i]
+  message("Reading in: ", file_name)
+  split_name <- stringr::str_split_1(file_name, "_")
+  site_name <- split_name[1] 
+  message("Saving as: ", site_name)
+  
+  # read in csv and assign to our object name ----
+  assign(site_name, readr::read_csv(here::here("data", "raw_data", file_name))) 
+  
+}
+```
+
+:::
+
+### **ii.** Write a `for loop` to **clean** all data
+
+::: panel-tabset
+
+## Step 1: 
+
+1.  create a vector of data frame names that you want to clean
+2.  create skeleton of your for loop to iterate over that vector of names
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of dfs to clean ----
+raw_data <- c("alegria", "carpinteria", "mohawk")
+
+# for loop to clean dfs using `clean_ocean_temps()` ----
+for (i in 1:length(raw_data)) {
+
+}
+```
+
+## Step 2: 
+
+1.  create object name to save the cleaned data frame to
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of dfs to clean ----
+raw_data <- c("alegria", "carpinteria", "mohawk")
+
+# for loop to clean dfs using `clean_ocean_temps()` ----
+for (i in 1:length(raw_data)) {
+  
+  # get df ----
+  message("cleaning df", i, ": -------- ", raw_data[i], " --------")
+  get(raw_data[i])  # ! https://community.rstudio.com/t/loop-through-all-dfs-in-environment/70943 !
+  
+  # create new name ----
+  df_name <- raw_data[i]
+  df_clean_name <- paste0(df_name, "_clean")
+  message("New df will be named: ", df_clean_name)
+
+}
+```
+
+## Intermediate Step:
+
+1. figure out how to call objects from the environment using variable names (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get))
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of dfs to clean ----
+raw_data <- c("alegria", "carpinteria", "mohawk")
+
+# call an object from environment ----
+test <- get(raw_data[1]) 
+```
+
+## Step 3: 
+
+1.  assign the cleaned data frame to the object name, `df_clean_name` (just as we did when we read in data earlier)
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+# get list of dfs to clean ----
+raw_data <- c("alegria", "carpinteria", "mohawk")
+
+# for loop to clean dfs using `clean_ocean_temps()` ----
+for (i in 1:length(raw_data)) {
+  
+  # print message ----
+  message("cleaning df ", i, ": -------- ", raw_data[i], " --------")
+  
+  # create new df name ----
+  df_name <- raw_data[i]
+  df_clean_name <- paste0(df_name, "_clean")
+  message("New df will be named: ", df_clean_name)
+  
+  # clean data ----
+  assign(df_clean_name, clean_ocean_temps(df = get(raw_data[i]), include_temps = c("Temp_top", "Temp_bot")))
+  
+  message("------------------------------------")
+}
+```
+
+:::
+
+### **iii.** Write a `for loop` to **plot** all data
+
+
+### **iv.** Putting it all together
+
+
+Okay, now let's bring all these pieces together! Our revised scripts might look something like this:
+
+::: panel-tabset
+## `my_analysis.R`
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+
+```
+
+## `R/clean_ocean_temps.R`
+::: {.callout-note}
+## Use a roxygen skeleton to document your function
+Even if you don't plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation -- the [`{roxygen2}`](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) package helps to make that process easier. Click anywhere inside your function, then choose Code > Insert Roxygen Skeleton to get started. 
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#' Process CDT/ADCP temperature data
+#'
+#' @param raw_data data frame of CTD/ADCP data collected at SBC LTER site moorings; search for data on the EDI Data Portal (http://portal.edirepository.org:80/nis/simpleSearch?defType=edismax&q=SBC+LTER%5C%3A+Ocean%5C%3A+Currents+and+Biogeochemistry%5C%3A+Moored+CTD+and+ADCP+data&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false)
+#' @param include_temps vector of character strings that includes one or more of the following variable names: Temp_top, Temp_mid, Temp_top
+#'
+#' @return a data frame
+#' @export
+#'
+#' @examples
+#' my_clean_df <- clean_ocean_temps(raw_data = my_raw_df, include_temps = c("Temp_bot"))
+clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ 
+  
+  # load dependencies ----
+  library(dplyr) 
+  library(tidyr)
+  library(stringr) 
+  library(chron)
+  library(naniar)
+  
+  # if data contains these colnames, clean the script
+  if(all(c("year", "month", "day", "decimal_time", "Temp_bot", "Temp_top", "Temp_mid") %in% colnames(raw_data))) { 
+    
+    message("Cleaning data...") 
+    
+    # get site name as character string from object (raw_data) name ----
+    site_name <- deparse(substitute(raw_data)) 
+    site_name <- paste(str_to_title(site_name), "Reef") 
+    
+    # columns to select ----
+    standard_cols <- c("year", "month", "day", "decimal_time") 
+    all_cols <- append(standard_cols, include_temps) 
+    
+    # clean data ----
+    temps_clean <- raw_data |> 
+      select(all_of(all_cols)) |> 
+      filter(year %in% c(2005:2020)) |> 
+      mutate(site = rep(site_name)) |> 
+      unite(date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = chron::times(as.numeric(decimal_time))) |> 
+      unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+      mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+             year = as.factor(year),
+             month = as.factor(month),
+             day = as.numeric(day)) |>
+      mutate(month_name = as.factor(month.name[month])) |>
+      replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) 
+    
+    # return cleaned df ----
+    return(temps_clean) 
+    
+  } else { 
+    
+    stop("The data frame provided does not include the necessary columns. Double check your data!") 
+    
+  }
+  
+}
+```
+
+## `R/plot_ocean_temps.R`
+
+::: {.callout-note}
+## Use a roxygen skeleton to document your function
+Even if you don't plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation -- the [`{roxygen2}`](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) package helps to make that process easier. Click anywhere inside your function, then choose Code > Insert Roxygen Skeleton to get started. 
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#' Create ridge line plot of CDT/ADCP bottom temperature data
+#'
+#' @param clean_data a data frame that has been pre-processed using clean_ocean_temp()
+#'
+#' @return a plot object
+#' @export
+#'
+#' @examples
+#' my_plot <- plot_ocean_temps(clean_data = my_clean_df)
+plot_ocean_temps <- function(clean_data) { 
+  
+  # load dependencies ----
+  library(dplyr)
+  library(ggplot2)
+  library(ggridges)
+  
+  # get site name for plot title ----
+  site_name <- unique(clean_data$site)
+  
+  # plot data ----
+  temp_plot <- clean_data |> 
+    group_by(month_name) |> 
+    ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+    ggridges::geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+    scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+    scale_y_discrete(limits = rev(month.name)) + 
+    scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+    labs(x = "Bottom Temperature (°C)",
+         title = paste("Bottom Temperatures at",  site_name, ", Santa Barbara, CA"), # 2
+         subtitle = "Temperatures (°C) aggregated by month from 2005 - 2022") +
+    ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.y = element_blank()
+    )
+  
+  # return plot ----
+  return(temp_plot)
+}
+```
+
+:::
+
 
