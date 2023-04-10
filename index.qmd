@@ -12,42 +12,48 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 By now, you may have heard instructors or online resources quote the saying, "If you've copied a block of code more than twice, you should probably consider writing a function." 
 
 As your analyses get longer and more complex, the chances that you'll benefit from writing functions will also increase -- many times, this is to minimize the amount of code you need to copy/paste, but writing functions can also help to make your code:
 
--  more navigable (i.e. by partitioning your code and functions into separate files)
--  more readable 
--  less prone to errors 
+-  more navigable (e.g. by partitioning your code and functions into separate files)
+-  more readable (e.g. creating human-readable function names that tell a user exactly what to expect)
+-  less prone to errors (e.g. less copying/pasting large code chunks means less opportunity to introduce bugs)
 
-Iteration is another tool for reducing duplication -- when you need to perform the same operation on multiple inputs (e.g. multiple data sets, columns, etc.) -- for loops are one approach for performing iterative tasks. Together, both functions and for loops provide a powerful means to streamlining your analytical pipelines.
+Iteration (i.e. performing the same operation on multiple inputs, e.g. multiple data sets, columns, etc.) is another tool for reducing duplication -- for loops are one approach for performing iterative tasks. Together, both functions and for loops provide a powerful means to streamlining your analytical pipelines.
 
-*However*, whether you're a new learner or seasoned programmer, it can sometimes feel overwhelming to know exactly where to start -- especially when you have an end goal that builds additional complexity/flexibility into your functions and for loops. Taking an iterative to building out your code can help make this process clearer, less daunting, and more fun. 
+*However*, whether you're a new learner or seasoned programmer, it can sometimes feel overwhelming to know exactly where to start -- especially when you have an end goal that builds additional complexity/flexibility into your functions and for loops. Taking an iterative approach to building out your code can help make this process clearer, less daunting, and more fun. 
 
 This document walks through *my* own iterative process for writing a couple functions and for loops to clean and visualize multiple, similar data sets. The way I've written this code is certainly not the *only* way (and likely not even the most optimized way), but I hope that by stepping through how I slowly build out my functions to be more flexible and user-friendly, it might help demonstrate an iterative workflow that I find particularly effective.
+
+## `r fontawesome::fa("file-lines", fill = "#5A5A5A", a11y = "sem")` How is this document organized?
 
 ## `r fontawesome::fa("table", fill = "#5A5A5A", a11y = "sem")` About the Data
 
 The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in Santa Barbara's coastal zone, where ocean currents and climate are highly variable with season and longer-term cycles. A number of kelp forest/rocky reef sites exist, where long-term data collection occurs using a variety of methods, including both repeated surveys and moored instrumentation. Today, we'll be exploring ocean temperature data, collected via moored instrumentation ([CTD](https://en.wikipedia.org/wiki/CTD_(instrument)#:~:text=A%20CTD%20or%20sonde%20is,is%20used%20to%20determine%20salinity.)s), from just three of these sites: Alegria Reef, Mohwak Reef, and Carpinteria Reef.
 
-Raw data are available for download on the EDI Data Portal:
+Raw data are available for download on the [EDI Data Portal](https://portal.edirepository.org/nis/home.jsp):
 
   1. Alegria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14>
   2. Mohawk Reef: <https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51>
   3. Carpinteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>
 
-## Setup
+## `r fontawesome::fa("folder-tree", fill = "#5A5A5A", a11y = "sem")` Setup
 
-create a github repo, add downloaded data, foldering structure
-
-## How is this document organized?
+1. create and clone a GitHub repository (be sure to add a `.gitignore` file)
+2. download the data -- these data are publicly available via the [EDI Data Portal](https://portal.edirepository.org/nis/home.jsp), but I've also added the necessary files to Google Drive for download [here](https://drive.google.com/drive/folders/1S2IY-qo29CU9ahRj_QNfFLfrh7DnT3CG?usp=share_link) -- these are *large* data files and take a few minutes to download; be sure to unzip the files once downloaded
+3. add a subdirectory called `/data`; move your unzipped `raw_data` folder into the `/data` subdirectory; your folder structure should now look like: `your-repo/data/raw_data`
+4. add your `/raw_data` folder to your `.gitignore` file so that you don't accidentally try pushing it to GitHub (these data files are far too large for that!) -- to do so, scroll to the bottom of your `.gitignore`, type the following, `data/raw_data/`, and save; you can push this modified `.gitignore` file to GitHub now, if you'd like
 
 ## **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Iteration 1:** Clean and plot *one* data set 
 
 Copying, pasting, and slightly updating code to clean and process multiple similarly-structured data sets is certainly the slowest and most prone-to-errors workflow. However, (in *my* honest opinion) it's almost always critical to being by processing one data set on it's own before attempting to write a function to do so.
 
 Let's start by doing that here.
+
+::: {.callout-note}
+I'll be writing the following code in a script called, `no_functions.R`, which I'll save to my repo's root directory.
+:::
 
 ### **i.** Load libraries
 ```{r}
@@ -74,7 +80,7 @@ Either download from the [Environmental Data Portal](https://portal.edirepositor
 # car <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2004.26&entityid=1d7769e33145ba4f04aa0b0a3f7d4a76")
 ```
 
-OR download files (they are large!) from [Google Drive](https://drive.google.com/drive/folders/1S2IY-qo29CU9ahRj_QNfFLfrh7DnT3CG?usp=share_link) and save to `data/raw_data/` (be sure to unzip them!):
+Or read in the downloaded files from `data/raw_data/`
 ```{r}
 #| eval: true
 #| echo: true
