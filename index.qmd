@@ -16,22 +16,20 @@ editor_options:
 
 Some text about the benefits of using functions & for loops -- jumping into the deep end is challenging for anyone. important to make this an iterative process
 
-## Setup
-
-create a github repo, add downloaded data, foldering structure
-
 ## `r fontawesome::fa("table", fill = "#5A5A5A", a11y = "sem")` About the Data
 
-The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in the coastal zone of Santa Barbara shores.
+The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in Santa Barbara's coastal zone, where ocean currents and climate are highly variable with season and longer-term cycles. A number of kelp forest/rocky reef sites exist, where long-term data collection occurs using a variety of methods, including both repeated surveys and moored instrumentation. Today, we'll be exploring ocean temperature data, collected via moored instrumentation (CTD), from just three of these sites: Alegria Reef, Mohwak Reef, and Carpinteria Reef.
 
-Today, we'll be exploring ocean temperature data from three coastal kelp forest sites within the Santa Barbra Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, and carpinteria Reef. 
-
-Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpinteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
+Raw data are available for download on the EDI Data Portal:
 
   1. Alegria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14>
   2. Mohawk Reef: <https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51>
   3. Carpinteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>
-  
+
+## Setup
+
+create a github repo, add downloaded data, foldering structure
+
 ## How is this document organized?
 
 ## **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Iteration 1:** Clean and plot *one* data set 
@@ -1021,19 +1019,7 @@ plot_ocean_temps <- function(clean_data) {
 
 ## **`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Iteration 3:** Write `for loop`s to read in, clean, and plot all your data
 
-What is a for loop? ___
-
-Learn more about iteration and writing `for loops` in R in [Ch 21 of R for Data Science](https://r4ds.had.co.nz/iteration.html), by Hadley Wickham.
-
-```{r}
-#| eval: true
-#| echo: false
-#| fig-align: center
-#| fig-alt: "Illustrated for loop example. Input vector is a parade of monsters, including monsters that are circles, triangles, and squares. The for loop they enter has an if-else statement: if the monster is a triangle, it gets sunglasses. Otherwise, it gets a hat. The output is the parade of monsters where the same input parade of monsters shows up, now wearing either sunglasses (if triangular) or a hat (if any other shape)."
-knitr::include_graphics("media/forloop.jpeg")
-```
-
-<center><span style="color: #959494;">Art by [Allison Horst](https://allisonhorst.com/)</span></center>
+Our functions certainly get the job done, and we might decide to stop there. But you might imagine a situation where we actually have dozens, or even hundreds of files to process/plot -- writing a `for loop` to iterate over those data sets may save us time/effort/potential coding errors.
 
 ### **i.** Write a `for loop` to **read in** all raw data files
 

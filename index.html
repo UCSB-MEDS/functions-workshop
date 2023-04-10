@@ -82,8 +82,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link" data-scroll-target="#about-the-data"><svg aria-label="table" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>table</title><path d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg> About the Data</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#how-is-this-document-organized" id="toc-how-is-this-document-organized" class="nav-link" data-scroll-target="#how-is-this-document-organized">How is this document organized?</a></li>
   <li><a href="#iteration-1-clean-and-plot-one-data-set" id="toc-iteration-1-clean-and-plot-one-data-set" class="nav-link" data-scroll-target="#iteration-1-clean-and-plot-one-data-set"><strong><svg aria-label="Person walking" role="img" viewbox="0 0 320 512" style="height:1em;width:0.62em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>Person walking</title><path d="M256 48c0 26.5-21.5 48-48 48s-48-21.5-48-48s21.5-48 48-48s48 21.5 48 48zM126.5 199.3c-1 .4-1.9 .8-2.9 1.2l-8 3.5c-16.4 7.3-29 21.2-34.7 38.2l-2.6 7.8c-5.6 16.8-23.7 25.8-40.5 20.2s-25.8-23.7-20.2-40.5l2.6-7.8c11.4-34.1 36.6-61.9 69.4-76.5l8-3.5c20.8-9.2 43.3-14 66.1-14c44.6 0 84.8 26.8 101.9 67.9L281 232.7l21.4 10.7c15.8 7.9 22.2 27.1 14.3 42.9s-27.1 22.2-42.9 14.3L247 287.3c-10.3-5.2-18.4-13.8-22.8-24.5l-9.6-23-19.3 65.5 49.5 54c5.4 5.9 9.2 13 11.2 20.8l23 92.1c4.3 17.1-6.1 34.5-23.3 38.8s-34.5-6.1-38.8-23.3l-22-88.1-70.7-77.1c-14.8-16.1-20.3-38.6-14.7-59.7l16.9-63.5zM68.7 398l25-62.4c2.1 3 4.5 5.8 7 8.6l40.7 44.4-14.5 36.2c-2.4 6-6 11.5-10.6 16.1L54.6 502.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L68.7 398z"></path></svg> Iteration 1:</strong> Clean and plot <em>one</em> data set</a>
   <ul class="collapse">
@@ -145,20 +145,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Some text about the benefits of using functions &amp; for loops – jumping into the deep end is challenging for anyone. important to make this an iterative process</p>
 </section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>create a github repo, add downloaded data, foldering structure</p>
-</section>
 <section id="about-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="about-the-data"><svg aria-label="table" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>table</title><path d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg> About the Data</h2>
-<p>The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in the coastal zone of Santa Barbara shores.</p>
-<p>Today, we’ll be exploring ocean temperature data from three coastal kelp forest sites within the Santa Barbra Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, and carpinteria Reef.</p>
-<p>Let’s say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpinteria Reef. Data are collected by moored instrumentation (CTD &amp; ADCP) at each site. Raw data are available for download on the EDI Data Portal:</p>
+<p>The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in Santa Barbara’s coastal zone, where ocean currents and climate are highly variable with season and longer-term cycles. A number of kelp forest/rocky reef sites exist, where long-term data collection occurs using a variety of methods, including both repeated surveys and moored instrumentation. Today, we’ll be exploring ocean temperature data, collected via moored instrumentation (CTD), from just three of these sites: Alegria Reef, Mohwak Reef, and Carpinteria Reef.</p>
+<p>Raw data are available for download on the EDI Data Portal:</p>
 <ol type="1">
 <li>Alegria Reef: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14" class="uri">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14</a></li>
 <li>Mohawk Reef: <a href="https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51" class="uri">https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51</a></li>
 <li>Carpinteria Reef: <a href="https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26" class="uri">https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26</a></li>
 </ol>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>create a github repo, add downloaded data, foldering structure</p>
 </section>
 <section id="how-is-this-document-organized" class="level2">
 <h2 class="anchored" data-anchor-id="how-is-this-document-organized">How is this document organized?</h2>
@@ -367,11 +366,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-cell="annotated-cell-8" data-code-lines="1">the name of the raw data frame (here, <code>alegria</code>) needs to be generalized</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="1">the name of the raw data frame (here, <code>alegria</code>) needs to be generalized</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-cell="annotated-cell-8" data-code-lines="4">the site name character string that’s repeated for the length of the added <code>site</code> column (here, <strong>“Alegria Reef”</strong>) needs to be generalized</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="2" data-code-lines="4">the site name character string that’s repeated for the length of the added <code>site</code> column (here, <strong>“Alegria Reef”</strong>) needs to be generalized</span>
 </dd>
 </dl>
 </div>
@@ -473,19 +472,19 @@ What is <code>return()</code> and when is it necessary?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-cell="annotated-cell-3" data-code-lines="1">create an <strong>argument</strong> called <code>raw_data</code> inside <code>function()</code></span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="1" data-code-lines="1">create an <strong>argument</strong> called <code>raw_data</code> inside <code>function()</code></span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-cell="annotated-cell-3" data-code-lines="4">replace our hard-coded data frame name (e.g.&nbsp;<code>alegria</code>) with our new argument name, <code>raw_data</code></span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="2" data-code-lines="4">replace our hard-coded data frame name (e.g.&nbsp;<code>alegria</code>) with our new argument name, <code>raw_data</code></span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-cell="annotated-cell-3" data-code-lines="20">update the name of the object we save our clean data to (currently <code>alegria_clean</code>) to something a bit more generalized, like <code>temps_clean</code> and <code>return()</code> our clean data frame object at the end</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="3" data-code-lines="20">update the name of the object we save our clean data to (currently <code>alegria_clean</code>) to something a bit more generalized, like <code>temps_clean</code> and <code>return()</code> our clean data frame object at the end</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-annotation="4" data-code-cell="annotated-cell-3" data-code-lines="7">add placeholder text in for <code>site</code> (we’ll work on making this flexible in Version )</span>
+<span data-code-cell="annotated-cell-3" data-code-annotation="4" data-code-lines="7">add placeholder text in for <code>site</code> (we’ll work on making this flexible in Version )</span>
 </dd>
 </dl>
 </div>
@@ -570,7 +569,7 @@ What is <code>return()</code> and when is it necessary?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-cell="annotated-cell-2" data-code-lines="3">load any dependencies (i.e.&nbsp;packages that are used within your function)</span>
+<span data-code-cell="annotated-cell-2" data-code-annotation="1" data-code-lines="3">load any dependencies (i.e.&nbsp;packages that are used within your function)</span>
 </dd>
 </dl>
 </div>
@@ -632,19 +631,19 @@ What is <code>return()</code> and when is it necessary?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-cell="annotated-cell-1" data-code-lines="6">import <code>{stringr}</code> package</span>
+<span data-code-cell="annotated-cell-1" data-code-annotation="1" data-code-lines="6">import <code>{stringr}</code> package</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-cell="annotated-cell-1" data-code-lines="11">get a character string from the data frame name (e.g.&nbsp;for <code>clean_ocean_temps(raw_df = alegria)</code>, <code>site_name</code> will be set to <code>"alegria"</code>)</span>
+<span data-code-cell="annotated-cell-1" data-code-annotation="2" data-code-lines="11">get a character string from the data frame name (e.g.&nbsp;for <code>clean_ocean_temps(raw_df = alegria)</code>, <code>site_name</code> will be set to <code>"alegria"</code>)</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-cell="annotated-cell-1" data-code-lines="12">format the character string by converting it to Title Case and pasting <code>"Reef"</code> at the end (e.g.&nbsp;<code>"alegria"</code> will become <code>"Alegria Reef"</code>)</span>
+<span data-code-cell="annotated-cell-1" data-code-annotation="3" data-code-lines="12">format the character string by converting it to Title Case and pasting <code>"Reef"</code> at the end (e.g.&nbsp;<code>"alegria"</code> will become <code>"Alegria Reef"</code>)</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-annotation="4" data-code-cell="annotated-cell-1" data-code-lines="18">substitute <code>site_name</code> in for the hard-coded site name</span>
+<span data-code-cell="annotated-cell-1" data-code-annotation="4" data-code-lines="18">substitute <code>site_name</code> in for the hard-coded site name</span>
 </dd>
 </dl>
 </div>
@@ -1095,20 +1094,7 @@ Use a roxygen skeleton to document your function
 </section>
 <section id="iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data" class="level2">
 <h2 class="anchored" data-anchor-id="iteration-3-write-for-loops-to-read-in-clean-and-plot-all-your-data"><strong><svg aria-label="rocket" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:#5A5A5A;overflow:visible;position:relative;"><title>rocket</title><path d="M156.6 384.9L125.7 354c-8.5-8.5-11.5-20.8-7.7-32.2c3-8.9 7-20.5 11.8-33.8L24 288c-8.6 0-16.6-4.6-20.9-12.1s-4.2-16.7 .2-24.1l52.5-88.5c13-21.9 36.5-35.3 61.9-35.3l82.3 0c2.4-4 4.8-7.7 7.2-11.3C289.1-4.1 411.1-8.1 483.9 5.3c11.6 2.1 20.6 11.2 22.8 22.8c13.4 72.9 9.3 194.8-111.4 276.7c-3.5 2.4-7.3 4.8-11.3 7.2v82.3c0 25.4-13.4 49-35.3 61.9l-88.5 52.5c-7.4 4.4-16.6 4.5-24.1 .2s-12.1-12.2-12.1-20.9V380.8c-14.1 4.9-26.4 8.9-35.7 11.9c-11.2 3.6-23.4 .5-31.8-7.8zM384 168c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40z"></path></svg> Iteration 3:</strong> Write <code>for loop</code>s to read in, clean, and plot all your data</h2>
-<p>What is a for loop? ___</p>
-<p>Learn more about iteration and writing <code>for loops</code> in R in <a href="https://r4ds.had.co.nz/iteration.html">Ch 21 of R for Data Science</a>, by Hadley Wickham.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="media/forloop.jpeg" class="img-fluid figure-img" alt="Illustrated for loop example. Input vector is a parade of monsters, including monsters that are circles, triangles, and squares. The for loop they enter has an if-else statement: if the monster is a triangle, it gets sunglasses. Otherwise, it gets a hat. The output is the parade of monsters where the same input parade of monsters shows up, now wearing either sunglasses (if triangular) or a hat (if any other shape)." width="2048"></p>
-</figure>
-</div>
-</div>
-</div>
-<center>
-<span style="color: #959494;">Art by <a href="https://allisonhorst.com/">Allison Horst</a></span>
-</center>
+<p>Our functions certainly get the job done, and we might decide to stop there. But you might imagine a situation where we actually have dozens, or even hundreds of files to process/plot – writing a <code>for loop</code> to iterate over those data sets may save us time/effort/potential coding errors.</p>
 <section id="i.-write-a-for-loop-to-read-in-all-raw-data-files" class="level3">
 <h3 class="anchored" data-anchor-id="i.-write-a-for-loop-to-read-in-all-raw-data-files"><strong>i.</strong> Write a <code>for loop</code> to <strong>read in</strong> all raw data files</h3>
 <p>ADD NOTE ABOUT TESTING FOR LOOPS BY SETTING i = 1</p>
