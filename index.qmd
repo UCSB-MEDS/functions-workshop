@@ -28,6 +28,28 @@ This document walks through *my* own iterative process for writing a couple func
 
 ## `r fontawesome::fa("file-lines", fill = "#5A5A5A", a11y = "sem")` How is this document organized?
 
+::: {.callout-important}
+## This workshop is indended to be taught in-person
+I'll be doing a lot of writing code, then testing code, then adding a bit more code, rinsing, and repeating. That can be a bit hard to capture in an instructional document, but I've done my best to outline my iterative steps here for folks to refer back to, as-needed.
+:::
+
+This document follows just one case study -- creating functions and for loops for processing and visualizing ocean temperature data from a few Santa Barbara Coastal LTER rocky reef sites. I do this in three "Stages", each of which includes multiple steps/code versions:
+
+**`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Stage 1:** Clean and plot *one* data set -- *always* my first step when beginning any analysis
+
+-  this is a standard workflow that includes reading in the data, then cleaning and plotting at least one data set (I include these steps for all three data sets, for reference...this involves lots of copying and pasting large chunks of code!)
+
+**`r fontawesome::fa("person-running", fill = "#5A5A5A", a11y = "sem")` Stage 2:** Write functions to clean & plot your data -- getting a little fancier by turning long, repeated code chunks into functions   
+
+-  Here I create two separate functions, one to clean data and one to plot data -- for each, I take a super iterative approach (i.e. I start by creating a relatively simple function (that works!), then build in more flexibility/complexity)
+
+**`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Stage 3:** Write for loops to read in, clean, and plot all your data -- streamline processing all of our data sets using less code
+
+-  Once I've created functions that help to reduce the code needed for processing and plotting my data, I write a few for loops to read in, clean, and plot all files (while this may seem a bit silly for just three files, imagine having to process/plot dozens or more!). Again, I do this in a few separate steps so I can ensure each small piece works before adding in the next bit.
+  
+ADD TEXT ABOUT SYMBOL FOR LOOKING STUFF UP   
+ADD TEXT ABOUT ANNOTATIONS
+
 ## `r fontawesome::fa("table", fill = "#5A5A5A", a11y = "sem")` About the Data
 
 The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in Santa Barbara's coastal zone, where ocean currents and climate are highly variable with season and longer-term cycles. A number of kelp forest/rocky reef sites exist, where long-term data collection occurs using a variety of methods, including both repeated surveys and moored instrumentation. Today, we'll be exploring ocean temperature data, collected via moored instrumentation ([CTD](https://en.wikipedia.org/wiki/CTD_(instrument)#:~:text=A%20CTD%20or%20sonde%20is,is%20used%20to%20determine%20salinity.)s), from just three of these sites: Alegria Reef, Mohwak Reef, and Carpinteria Reef.
@@ -45,7 +67,7 @@ Raw data are available for download on the [EDI Data Portal](https://portal.edir
 3. add a subdirectory called `/data`; move your unzipped `raw_data` folder into the `/data` subdirectory; your folder structure should now look like: `your-repo/data/raw_data`
 4. add your `/raw_data` folder to your `.gitignore` file so that you don't accidentally try pushing it to GitHub (these data files are far too large for that!) -- to do so, scroll to the bottom of your `.gitignore`, type the following, `data/raw_data/`, and save; you can push this modified `.gitignore` file to GitHub now, if you'd like
 
-## **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Iteration 1:** Clean and plot *one* data set 
+## **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Stage 1:** Clean and plot *one* data set 
 
 Copying, pasting, and slightly updating code to clean and process multiple similarly-structured data sets is certainly the slowest and most prone-to-errors workflow. However, (in *my* honest opinion) it's almost always critical to being by processing one data set on it's own before attempting to write a function to do so.
 
@@ -102,16 +124,16 @@ Below, we select only the necessary columns (there are *far* too many (87) in th
 alegria_clean <- alegria |> 
   
   # keep only necessary columns & filter for years 2005-2020
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
   
   # add column with site name
   mutate(site = rep("Alegria Reef")) |> 
   
   # create date time column
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   
   # coerce data types
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
@@ -126,7 +148,7 @@ alegria_clean <- alegria |>
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
   
   # select/reorder desired columns
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 
 ```
 
@@ -140,8 +162,10 @@ Here, we create a ridge line plot (using the `{ggridges}` package) showing aggre
 #| warning: false
 alegria_plot <- alegria_clean |> 
   
+  # group by month ----
   group_by(month_name) |> 
   
+  # plot ----
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
   geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
   scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
@@ -170,23 +194,23 @@ If we were to continue with this workflow (which is absolutely a valid way that 
 
 #..........................Mohawk Reef...........................
 
-# clean
+# clean ----
 mohawk_clean <- mohawk |> 
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
   mutate(site = rep("Mohawk Reef")) |> 
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
          year = as.factor(year),
          month = as.factor(month),
          day = as.numeric(day)) |>
   mutate(month_name = as.factor(month.name[month])) |>
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 
-# plot
+# plot ----
 mohawk_plot <- mohawk_clean |> 
   group_by(month_name) |> 
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
@@ -206,23 +230,23 @@ mohawk_plot
 
 #........................Carpinteria Reef........................
 
-# clean
+# clean ----
 carpinteria_clean <- carpinteria |> 
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
   mutate(site = rep("Carpinteria Reef")) |> 
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
          year = as.factor(year),
          month = as.factor(month),
          day = as.numeric(day)) |>
   mutate(month_name = as.factor(month.name[month])) |>
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 
-# plot
+# plot ----
 carpinteria_plot <- carpinteria_clean |> 
   group_by(month_name) |> 
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
@@ -241,7 +265,23 @@ carpinteria_plot <- carpinteria_clean |>
 carpinteria_plot
 ```
 
-## **`r fontawesome::fa("person-running", fill = "#5A5A5A", a11y = "sem")` Iteration 2:** Write functions to clean & plot your data
+## **`r fontawesome::fa("person-running", fill = "#5A5A5A", a11y = "sem")` Stage 2:** Write functions to clean & plot your data
+
+::: {.callout-note}
+## Where do I write/save my functions?
+While there's no hard and fast rule, I tend to create a subdirectory within my project (e.g. named `/R`, `/utils`, etc.) to house all my function scripts. I prefer to create a separate `.R` script for each of my functions, and name each file the same as the function itself (e.g. if I'm writing a function called `do_fun_thing()`, I'd save it to a script called `do_fun_thing.R`).
+
+You can then **source** your functions into whatever script (or rmd/qmd file) where you call that function (e.g. `source("utils/do_fun_thing.R")`. 
+
+**Note:** You *cannot* `source()` a `.rmd` or `.qmd` file into another file/script, therefore it's important to save functions to a `.R` file.
+
+Here, let's create the following:
+
+-  a `/utils` folder to store our functions scripts
+-  a `clean_ocean_temps.R` file (saved to `/utils`), where we'll write a function to clean our data
+-  a `plot_ocean_temps.R` file (saved to `/utils`), where we'll write a function to plot our data
+-  a `using_functions.R` file (saved to the root directory), where we'll use our functions to clean and plot our data
+:::
 
 ### **i.** Write a function to **clean** data sets
 
@@ -256,19 +296,19 @@ It's helpful to first identify which parts of the cleaning code need to be gener
 #| message: false
 #| warning: false
 alegria_clean <- alegria |> # <1>
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
   mutate(site = rep("Alegria Reef")) |> # <2>
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
          year = as.factor(year),
          month = as.factor(month),
          day = as.numeric(day)) |>
   mutate(month_name = as.factor(month.name[month])) |>
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 ```
 1. the name of the raw data frame (here, `alegria`) needs to be generalized
 2. the site name character string that's repeated for the length of the added `site` column (here, **"Alegria Reef"**) needs to be generalized
@@ -290,7 +330,7 @@ clean_ocean_temps <- function(){
 }
 ```
 
-Now, let's copy and paste our cleaning code for Alegria Reef data (from **Iteration 1**, above) into the body of the function (i.e. within the curly brackets, `{}`).
+Now, let's copy and paste our cleaning code for Alegria Reef data (from **Stage 1**, above) into the body of the function (i.e. within the curly brackets, `{}`).
 ```{r}
 #| eval: false
 #| echo: true
@@ -299,19 +339,19 @@ Now, let's copy and paste our cleaning code for Alegria Reef data (from **Iterat
 clean_ocean_temps <- function(){
  
   alegria_clean <- alegria |> 
-    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
     filter(year %in% c(2005:2020)) |> 
     mutate(site = rep("Alegria Reef")) |> 
-    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-    mutate(time = times(as.numeric(decimal_time))) |> 
-    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
     mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
           year = as.factor(year),
           month = as.factor(month),
           day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
   
 }
 ```
@@ -359,19 +399,19 @@ clean_ocean_temps <- function(raw_data){ # <1>
   
   # clean data ----
   temps_clean <- raw_data |> # <2>
-    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
     filter(year %in% c(2005:2020)) |> 
     mutate(site = rep("___ Reef")) |> # <4>
-    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-    mutate(time = times(as.numeric(decimal_time))) |> 
-    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
     mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
           year = as.factor(year),
           month = as.factor(month),
           day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
   
   # return cleaned df ----
   return(temps_clean) # <3>
@@ -412,19 +452,19 @@ clean_ocean_temps <- function(raw_data){
   
   # clean data ----
   temps_clean <- raw_data |>
-    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
     filter(year %in% c(2005:2020)) |> 
     mutate(site = rep("___ Reef")) |>
-    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-    mutate(time = times(as.numeric(decimal_time))) |> 
-    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
     mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
           year = as.factor(year),
           month = as.factor(month),
           day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
   
   # return cleaned df ----
   return(temps_clean) 
@@ -457,19 +497,19 @@ clean_ocean_temps <- function(raw_data){
   
   # clean data ----
   temps_clean <- raw_data |>
-    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
     filter(year %in% c(2005:2020)) |> 
     mutate(site = rep("___ Reef")) |>
-    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-    mutate(time = times(as.numeric(decimal_time))) |> 
-    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
     mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
           year = as.factor(year),
           month = as.factor(month),
           day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
   
   # return cleaned df ----
   return(temps_clean) 
@@ -521,19 +561,19 @@ clean_ocean_temps <- function(raw_data){
     
   # clean data ----
   temps_clean <- raw_data |> 
-    select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
     filter(year %in% c(2005:2020)) |> 
     mutate(site = rep(site_name)) |> # <4>
-    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-    mutate(time = chron::times(as.numeric(decimal_time))) |> 
-    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
     mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
           year = as.factor(year),
           month = as.factor(month),
           day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
   
   # return cleaned df ----
   return(temps_clean) 
@@ -589,16 +629,16 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
     select(all_of(all_cols)) |> # 2
     filter(year %in% c(2005:2020)) |> 
     mutate(site = rep(site_name)) |> 
-    unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-    mutate(time = chron::times(as.numeric(decimal_time))) |> 
-    unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
     mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
            year = as.factor(year),
            month = as.factor(month),
            day = as.numeric(day)) |>
     mutate(month_name = as.factor(month.name[month])) |>
     replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-    select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) # 3
+    select(any_of(c(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top))) # 3
   
   # return cleaned df ----
   return(temps_clean) 
@@ -658,16 +698,16 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
       select(all_of(all_cols)) |> 
       filter(year %in% c(2005:2020)) |> 
       mutate(site = rep(site_name)) |> 
-      unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-      mutate(time = chron::times(as.numeric(decimal_time))) |> 
-      unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+      unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = times(decimal_time)) |> 
+      unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
       mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
              year = as.factor(year),
              month = as.factor(month),
              day = as.numeric(day)) |>
       mutate(month_name = as.factor(month.name[month])) |>
       replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) 
+      select(any_of(c(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top))) 
     
     # return cleaned df ----
     return(temps_clean) 
@@ -957,16 +997,16 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
       select(all_of(all_cols)) |> 
       filter(year %in% c(2005:2020)) |> 
       mutate(site = rep(site_name)) |> 
-      unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-      mutate(time = chron::times(as.numeric(decimal_time))) |> 
-      unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+      unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = times(decimal_time)) |> 
+      unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
       mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
              year = as.factor(year),
              month = as.factor(month),
              day = as.numeric(day)) |>
       mutate(month_name = as.factor(month.name[month])) |>
       replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) 
+      select(any_of(c(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top"))) 
     
     # return cleaned df ----
     return(temps_clean) 
@@ -1034,11 +1074,11 @@ plot_ocean_temps <- function(clean_data) {
 
 :::
 
-## **`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Iteration 3:** Write `for loop`s to read in, clean, and plot all your data
+## **`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Stage 3:** Write for loops to read in, clean, and plot all your data
 
-Our functions certainly get the job done, and we might decide to stop there. But you might imagine a situation where we actually have dozens, or even hundreds of files to process/plot -- writing a `for loop` to iterate over those data sets may save us time/effort/potential coding errors.
+Our functions certainly get the job done, and we might decide to stop there. But you might imagine a situation where we actually have dozens, or even hundreds of files to process/plot -- writing a for loop to iterate over those data sets may save us time/effort/potential coding errors.
 
-### **i.** Write a `for loop` to **read in** all raw data files
+### **i.** Write a for loop to **read in** all raw data files
 
 ADD NOTE ABOUT TESTING FOR LOOPS BY SETTING i = 1
 
@@ -1047,7 +1087,7 @@ ADD NOTE ABOUT TESTING FOR LOOPS BY SETTING i = 1
 ## Step 1:
 
 1.  get list of files that you want to work with
-2.  create the skeleton of a `for loop` to iterate over that list of files
+2.  create the skeleton of a for loop to iterate over that list of files
 ```{r}
 #| eval: false
 #| echo: true
@@ -1119,7 +1159,7 @@ for (i in 1:length(temp_files)){
 
 :::
 
-### **ii.** Write a `for loop` to **clean** all data
+### **ii.** Write a for loop to **clean** all data
 
 ::: panel-tabset
 
@@ -1217,7 +1257,7 @@ for (i in 1:length(raw_data)) {
 
 :::
 
-### **iii.** Write a `for loop` to **plot** all data
+### **iii.** Write a for loop to **plot** all data
 
 
 ### **iv.** Putting it all together
@@ -1283,16 +1323,16 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
       select(all_of(all_cols)) |> 
       filter(year %in% c(2005:2020)) |> 
       mutate(site = rep(site_name)) |> 
-      unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-      mutate(time = chron::times(as.numeric(decimal_time))) |> 
-      unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+      unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = times(decimal_time)) |> 
+      unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
       mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
              year = as.factor(year),
              month = as.factor(month),
              day = as.numeric(day)) |>
       mutate(month_name = as.factor(month.name[month])) |>
       replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) 
+      select(any_of(c(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top))) 
     
     # return cleaned df ----
     return(temps_clean) 
