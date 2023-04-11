@@ -214,7 +214,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I’ll be writing the following code in a script called, <code>no_functions.R</code>, which I’ll save to my repo’s root directory.</p>
+<p>I’ll be writing the following code in a script called, <code>no_functions_pipeline.R</code>, which I’ll save to my repo’s root directory.</p>
 </div>
 </div>
 <section id="i.-load-libraries" class="level3">
@@ -265,7 +265,7 @@ Note
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">month =</span> <span class="fu">as.factor</span>(month),</span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">day =</span> <span class="fu">as.numeric</span>(day)) <span class="sc">|&gt;</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add month name</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add month name (see: https://stackoverflow.com/questions/22058393/convert-a-numeric-month-to-a-month-abbreviation)</span></span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month_name =</span> <span class="fu">as.factor</span>(month.name[month])) <span class="sc">|&gt;</span></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># replace 9999s with NAs (will throw warning if var isn't present, but still execute)</span></span>
@@ -404,14 +404,14 @@ Where do I write/save my functions?
 </div>
 <div class="callout-body-container callout-body">
 <p>While there’s no hard and fast rule, I tend to create a subdirectory within my project (e.g.&nbsp;named <code>/R</code>, <code>/utils</code>, etc.) to house all my function scripts. I prefer to create a separate <code>.R</code> script for each of my functions, and name each file the same as the function itself (e.g.&nbsp;if I’m writing a function called <code>do_fun_thing()</code>, I’d save it to a script called <code>do_fun_thing.R</code>).</p>
-<p>You can then <strong>source</strong> your functions into whatever script (or rmd/qmd file) where you call that function (e.g.&nbsp;<code>source("utils/do_fun_thing.R")</code>.</p>
+<p>You can then <strong>source</strong> your function files into whatever script (or <code>.rmd</code>/<code>.qmd</code> file) where you call that function (e.g.&nbsp;<code>source("utils/do_fun_thing.R")</code>.</p>
 <p><strong>Note:</strong> You <em>cannot</em> <code>source()</code> a <code>.rmd</code> or <code>.qmd</code> file into another file/script, therefore it’s important to save functions to a <code>.R</code> file.</p>
 <p>Here, let’s create the following:</p>
 <ul>
 <li>a <code>/utils</code> folder to store our functions scripts</li>
 <li>a <code>clean_ocean_temps.R</code> file (saved to <code>/utils</code>), where we’ll write a function to clean our data</li>
 <li>a <code>plot_ocean_temps.R</code> file (saved to <code>/utils</code>), where we’ll write a function to plot our data</li>
-<li>a <code>using_functions.R</code> file (saved to the root directory), where we’ll use our functions to clean and plot our data</li>
+<li>a <code>using_functions_pipeline.R</code> file (saved to the root directory), where we’ll use our functions to clean and plot our data – you can also read-in your data files here, just as we did in <a href="http://localhost:7074/#ii.-import-raw-data">Stage 1, part ii</a></li>
 </ul>
 </div>
 </div>
@@ -441,16 +441,29 @@ Where do I write/save my functions?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-cell="annotated-cell-8" data-code-annotation="1">the name of the raw data frame (here, <code>alegria</code>) needs to be generalized</span>
+<span data-code-annotation="1" data-code-lines="1" data-code-cell="annotated-cell-8">the name of the raw data frame (here, <code>alegria</code>) needs to be generalized</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="4" data-code-cell="annotated-cell-8" data-code-annotation="2">the site name character string that’s repeated for the length of the added <code>site</code> column (here, <strong>“Alegria Reef”</strong>) needs to be generalized</span>
+<span data-code-annotation="2" data-code-lines="4" data-code-cell="annotated-cell-8">the site name character string that’s repeated for the length of the added <code>site</code> column (here, <strong>“Alegria Reef”</strong>) needs to be generalized</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Now we can start to build out our function. We’ll start by creating a super basic function, then build in more complexity. I encourage you to test out your function after each version to ensure that it works as you intend it to.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We’ll be writing our <code>clean_temp_data()</code> function in our <code>/utils/clean_temp_data.R</code> file!</p>
+</div>
+</div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Version 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Version 2</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Version 3</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Version 4</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href="">Version 5</a></li></ul>
 <div class="tab-content">
@@ -487,9 +500,10 @@ Where do I write/save my functions?
 <li>create an input (aka <strong>argument</strong>) called <code>raw_data</code> inside <code>function()</code> (NOTE: you can name your argument however you’d like, but preferably something short and descriptive)</li>
 <li>replace our hard-coded data frame name (e.g.&nbsp;<code>alegria</code> in the code above) in our cleaning pipeline with <code>raw_data</code></li>
 <li>update the name of the object we save our clean data to (currently <code>alegria_clean</code>) to something a bit more generalized, like <code>temps_clean</code> and <code>return()</code> our clean data frame object at the end</li>
+<li>recall that part of our cleaning pipeline includes adding a column called <code>site</code>, with repeating values that are the site name; for now, let’s just add some placeholder text (<em>___ Reef</em>) and we’ll figure out how to make that text match up with the data in the next versions of our function</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -498,7 +512,7 @@ What is <code>return()</code> and when is it necessary?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Oftentimes, we want a function to do some processing on whatever we provide it and then give us back the result. We use the <code>return()</code> function to do this in R.</p>
 <p>R <strong>automatically</strong> returns the the last output of a function – here, it isn’t necessary to <code>return(temps_clean)</code> since the <code>temps_clean</code> data frame is the last output of our <code>clean_ocean_temps()</code> function.</p>
@@ -520,7 +534,6 @@ What is <code>return()</code> and when is it necessary?
 </div>
 </div>
 </div>
-<p>Recall that part of our cleaning pipeline includes adding a column called <code>site</code>, with repeating values that are the site name. For now, I’ll just put some placeholder text (<em>___ Reef</em>) and we’ll figure out how to make that text match up with the data in the next versions of our function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>clean_ocean_temps <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_data){</span>
 <span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -547,19 +560,19 @@ What is <code>return()</code> and when is it necessary?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-cell="annotated-cell-3" data-code-annotation="1">create an <strong>argument</strong> called <code>raw_data</code> inside <code>function()</code></span>
+<span data-code-annotation="1" data-code-lines="1" data-code-cell="annotated-cell-3">create an <strong>argument</strong> called <code>raw_data</code> inside <code>function()</code></span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="4" data-code-cell="annotated-cell-3" data-code-annotation="2">replace our hard-coded data frame name (e.g.&nbsp;<code>alegria</code>) with our new argument name, <code>raw_data</code></span>
+<span data-code-annotation="2" data-code-lines="4" data-code-cell="annotated-cell-3">replace our hard-coded data frame name (e.g.&nbsp;<code>alegria</code>) with our new argument name, <code>raw_data</code></span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="20" data-code-cell="annotated-cell-3" data-code-annotation="3">update the name of the object we save our clean data to (currently <code>alegria_clean</code>) to something a bit more generalized, like <code>temps_clean</code> and <code>return()</code> our clean data frame object at the end</span>
+<span data-code-annotation="3" data-code-lines="20" data-code-cell="annotated-cell-3">update the name of the object we save our clean data to (currently <code>alegria_clean</code>) to something a bit more generalized, like <code>temps_clean</code> and <code>return()</code> our clean data frame object at the end</span>
 </dd>
 <dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-lines="7" data-code-cell="annotated-cell-3" data-code-annotation="4">add placeholder text in for <code>site</code> (we’ll work on making this flexible in Version )</span>
+<span data-code-annotation="4" data-code-lines="7" data-code-cell="annotated-cell-3">add placeholder text in for <code>site</code> (we’ll work on making this flexible in Version )</span>
 </dd>
 </dl>
 </div>
@@ -644,7 +657,7 @@ What is <code>return()</code> and when is it necessary?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="3" data-code-cell="annotated-cell-2" data-code-annotation="1">load any dependencies (i.e.&nbsp;packages that are used within your function)</span>
+<span data-code-annotation="1" data-code-lines="3" data-code-cell="annotated-cell-2">load any dependencies (i.e.&nbsp;packages that are used within your function)</span>
 </dd>
 </dl>
 </div>
@@ -706,19 +719,19 @@ What is <code>return()</code> and when is it necessary?
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="6" data-code-cell="annotated-cell-1" data-code-annotation="1">import <code>{stringr}</code> package</span>
+<span data-code-annotation="1" data-code-lines="6" data-code-cell="annotated-cell-1">import <code>{stringr}</code> package</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="11" data-code-cell="annotated-cell-1" data-code-annotation="2">get a character string from the data frame name (e.g.&nbsp;for <code>clean_ocean_temps(raw_df = alegria)</code>, <code>site_name</code> will be set to <code>"alegria"</code>)</span>
+<span data-code-annotation="2" data-code-lines="11" data-code-cell="annotated-cell-1">get a character string from the data frame name (e.g.&nbsp;for <code>clean_ocean_temps(raw_df = alegria)</code>, <code>site_name</code> will be set to <code>"alegria"</code>)</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="12" data-code-cell="annotated-cell-1" data-code-annotation="3">format the character string by converting it to Title Case and pasting <code>"Reef"</code> at the end (e.g.&nbsp;<code>"alegria"</code> will become <code>"Alegria Reef"</code>)</span>
+<span data-code-annotation="3" data-code-lines="12" data-code-cell="annotated-cell-1">format the character string by converting it to Title Case and pasting <code>"Reef"</code> at the end (e.g.&nbsp;<code>"alegria"</code> will become <code>"Alegria Reef"</code>)</span>
 </dd>
 <dt data-target-cell="annotated-cell-1" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-lines="18" data-code-cell="annotated-cell-1" data-code-annotation="4">substitute <code>site_name</code> in for the hard-coded site name</span>
+<span data-code-annotation="4" data-code-lines="18" data-code-cell="annotated-cell-1">substitute <code>site_name</code> in for the hard-coded site name</span>
 </dd>
 </dl>
 </div>
@@ -1006,7 +1019,7 @@ What is <code>return()</code> and when is it necessary?
 <h3 class="anchored" data-anchor-id="iii-putting-it-all-together"><strong>iii:</strong> Putting it all together</h3>
 <p>Okay, now let’s bring all these pieces together! Our revised scripts might look something like this:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href=""><code>my_analysis.R</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href=""><code>R/clean_ocean_temps.R</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href=""><code>R/plot_ocean_temps.R</code></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href=""><code>using_functions_pipeline.R</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href=""><code>utils/clean_ocean_temps.R</code></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href=""><code>utils/plot_ocean_temps.R</code></a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
@@ -1094,18 +1107,18 @@ Use a roxygen skeleton to document your function
 <span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>             <span class="at">day =</span> <span class="fu">as.numeric</span>(day)) <span class="sc">|&gt;</span></span>
 <span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">month_name =</span> <span class="fu">as.factor</span>(month.name[month])) <span class="sc">|&gt;</span></span>
 <span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">Temp_bot =</span> <span class="dv">9999</span>, <span class="at">Temp_top =</span> <span class="dv">9999</span>, <span class="at">Temp_mid =</span> <span class="dv">9999</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="fu">any_of</span>(<span class="fu">c</span>(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top<span class="st">"))) </span></span>
-<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
-<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a><span class="st">    # return cleaned df ----</span></span>
-<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="st">    return(temps_clean) </span></span>
-<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
-<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a><span class="st">  } else { </span></span>
-<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
-<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a><span class="st">    stop("</span>The data frame provided does not include the necessary columns. Double check your data<span class="sc">!</span><span class="st">") </span></span>
-<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
-<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
-<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a><span class="st">  </span></span>
-<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="fu">any_of</span>(<span class="fu">c</span>(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top))) </span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># return cleaned df ----</span></span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(temps_clean) </span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> { </span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"The data frame provided does not include the necessary columns. Double check your data!"</span>) </span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
