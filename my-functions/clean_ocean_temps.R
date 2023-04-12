@@ -33,10 +33,11 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
     site_name <- paste(str_to_title(site_name), "Reef")
     
     # clean data
-    temps_clean <- raw_df |> 
+    temps_clean <- raw_data |> 
       
       # keep only necessary columns
-      select(all_of(all_cols)) |> # ! !
+      # select(all_of(all_cols)) |> # ! !
+      select(all_of(all_cols)) |> 
       
       # add column with site name
       mutate(site = rep(site_name)) |> 

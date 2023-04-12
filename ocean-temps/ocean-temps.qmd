@@ -40,7 +40,7 @@ source(here::here("my-functions", "plot_ocean_temps.R"))
 ## OR download files (they are large!) from Google Drive and save to `data/raw_data/sbc_lter_temps`
 
 ```{r}
-alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+alegria <- readr::read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
 mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
 carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 ```
