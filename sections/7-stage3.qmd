@@ -6,8 +6,10 @@ format: html
 
 Our functions certainly get the job done, and we might decide to stop there. But you might imagine a situation where we actually have dozens, or even hundreds of files to process/plot -- writing a for loop to iterate over those data sets may save us time/effort/potential coding errors.
 
+In Stage 3, we'll write three different for loops -- one to read in our data, one to clean our data, and one to plot our data (though you can certainly write a single on to do all three steps!).
+
 ::: {.callout-note}
-I’ll be writing the following code in a script called, `forloops_pipeline.R`, which I’ll save to my repo’s root directory. I'll start off my script by sourcing both my functions:
+I’ll be writing the following code in a script called, `forloops_pipeline.R`, which I’ll save to my repo’s root directory. I'll start off my script by importing all required packages and sourcing both my functions:
 
 ```{r}
 #| eval: false
@@ -15,6 +17,16 @@ I’ll be writing the following code in a script called, `forloops_pipeline.R`, 
 #| message: false
 #| warning: false
 # forloops_pipeline.R #
+
+#..........................load packages......................... 
+library(readr)
+library(dplyr) 
+library(tidyr)
+library(stringr) 
+library(chron)
+library(naniar)
+library(ggplot2)
+library(ggridges) 
 
 #........................source functions........................
 source("utils/clean_ocean_temps.R")
@@ -33,6 +45,8 @@ It can be easy to lose track of what's happening inside for loops, particularly 
 :::
 
 ### **Step 1:**
+
+***The primary goal of step 1 is to get a list of elements (in our case, `.csv` files) to read in and create the skeleton of our for loop for iterating over those files.***
 
 ```{r}
 #| eval: false
@@ -53,6 +67,8 @@ for (i in 1:length(temp_files)){ # <2>
 
 ### **Step 2:** 
 
+***The primary goal of step 2 is to create an object name that we'll save our raw data frame to once it's read in using `read_csv()`.***
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -66,18 +82,23 @@ temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
 for (i in 1:length(temp_files)){
   
   # get object name from file name ----
-  file_name <- temp_files[i] 
+  file_name <- temp_files[i] # <1>
   message("Reading in: ", file_name) # <2>
-  split_name <- stringr::str_split_1(file_name, "_") # <1>
-  site_name <- split_name[1] # <1>
-  message("Saving as: ", site_name) # <2>
+  split_name <- stringr::str_split_1(file_name, "_") # <3>
+  site_name <- split_name[1] # <4>
+  message("Saving as: ", site_name) # <5>
   
 }
 ```
-1. create an object name based on the site name to save your data to (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced this [resource](https://stringr.tidyverse.org/reference/str_split.html))
-2. add some helpful messages so you can more easily check progress
+1. get a file from your list of `temp_files` and save it to an object named `file_name` (or something intuitive)
+2. print a helpful message so that you know which file your for loop is currently iterating on
+3. split apart the file name at "_" using `stringr::str_split_1()` -- this function takes a single string and returns a character vector (e.g. `"alegria_mooring_ale_20210617.csv"` > `"alegria"      "mooring"      "ale"          "20210617.csv"`)
+4. get the first element of the vector, which is the name of the site (i.e. `"alegria"`; `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced this [resource](https://stringr.tidyverse.org/reference/str_split.html)); this will become the name of the object that our raw data is saved to 
+5. print another helpful message 
 
 ### **Step 3:**
+
+***The primary goal of step 3 is to read in the raw data and assign it to the object name we just created.***
 
 ```{r}
 #| eval: false
@@ -103,11 +124,13 @@ for (i in 1:length(temp_files)){
   
 }
 ```
-1. assign the data that you're reading in to the object name you created (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop))
+1. assign the data that you're reading in to the object name you created using the `assign()` function (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop))
 
 ## **ii.** Write a for loop to **clean** all data
 
 ### **Step 1:** 
+
+***The primary goal of step 1 is to get a list of elements (in our case, raw data frame objects) to iterate over. We'll also create the skeleton of our for loop which will be used to iterate over those data frames.***
 
 ```{r}
 #| eval: false
@@ -128,6 +151,8 @@ for (i in 1:length(raw_data)) { # <2>
 
 ### **Step 2:** 
 
+***The primary goal of step 2 is to create an object name that we'll save our cleaned data frame to once it's processed using `clean_ocean_temps()`.***
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -141,18 +166,23 @@ raw_data <- c("alegria", "carpinteria", "mohawk")
 for (i in 1:length(raw_data)) {
   
   # print message ----
-  message("cleaning df", i, ": -------- ", raw_data[i], " --------")
+  message("cleaning df", i, ": -------- ", raw_data[i], " --------") # <1>
   
   # create new name ---- 
-  df_name <- raw_data[i] # <1>
-  df_clean_name <- paste0(df_name, "_clean") # <1>
+  df_name <- raw_data[i] # <2>
+  df_clean_name <- paste0(df_name, "_clean") # <2>
   message("New df will be named: ", df_clean_name) # <1>
 
 }
 ```
-1.  create an object name to save the cleaned data frame to (here, the object name will be `*_plot`, e.g. `alegria_plot`)
+1. add a message that lets us know which data frame is currently being processed
+2. get a data frame from our list of `raw_data` and save it to an object called `df_name` (or something intuitive)
+3. build the object name that we'll save our cleaned data frame to -- we want this to be in the format `*_clean`, where `*` is the site name (e.g. `alegria_clean`); we can use the `paste()` function on `df_name` to do this
+4. add a helpful message so we can easily keep track of what our for loop is doing
 
 ## **Intermediate Step:**
+
+***The primary goal of this intermediate step is to learn how to call objects from the global environment using a matching character string.***
 
 ```{r}
 #| eval: false
@@ -160,16 +190,20 @@ for (i in 1:length(raw_data)) {
 #| message: false
 #| warning: false
 
-# get list of dfs to clean ----
+# get vector of dfs to clean ----
 raw_data <- c("alegria", "carpinteria", "mohawk")
 
-# call an object from environment ----
-test <- get(raw_data[1]) # <1>
+# the first element of our vector, `raw_data` (which is a character string)
+first_df_name <- raw_data[1]
+
+# call an object from environment using the  ----
+test <- get(first_df_name) # <1>
 ```
 1. figure out how to call objects from the environment using variable names (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get))
 
 ### **Step 3:** 
 
+***The primary goal of step 3 is to ***
 ```{r}
 #| eval: false
 #| echo: true
