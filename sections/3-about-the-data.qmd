@@ -1,0 +1,13 @@
+---
+format: html
+---
+
+# `r fontawesome::fa("table", fill = "#5A5A5A", a11y = "sem")` About the Data
+
+The Santa Barbara Coastal Long Term Ecological Research (SBC LTER) site was established in 2000 and is located in Santa Barbara's coastal zone, where ocean currents and climate are highly variable with season and longer-term cycles. A number of kelp forest/rocky reef sites exist, where long-term data collection occurs using a variety of methods, including both repeated surveys and moored instrumentation. Today, we'll be exploring ocean temperature data, collected via moored instrumentation ([CTD](https://en.wikipedia.org/wiki/CTD_(instrument)#:~:text=A%20CTD%20or%20sonde%20is,is%20used%20to%20determine%20salinity.)s), from just three of these sites: Alegria Reef, Mohwak Reef, and Carpinteria Reef.
+
+Raw data are available for download on the [EDI Data Portal](https://portal.edirepository.org/nis/home.jsp):
+
+  1. Alegria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14>
+  2. Mohawk Reef: <https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51>
+  3. Carpinteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>

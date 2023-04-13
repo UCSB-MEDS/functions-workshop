@@ -2,9 +2,17 @@
 format: html
 ---
 
-I (personally) find it absolutely critical to figure out how to clean/wrangle/tidy one data set on its own before I even begin thinking about writing a function. The data set I'm using contains *lots* of variables that I'm not interested in. Additionally....
+# **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Stage 1:** Clean and plot *one* data set 
 
-### **i.** Load libraries
+Copying, pasting, and slightly updating code to clean and process multiple similarly-structured data sets is certainly the slowest and most prone-to-errors workflow. However, (in *my* honest opinion) it's almost always critical to being by processing one data set on it's own before attempting to write a function to do so.
+
+Let's start by doing that here.
+
+::: {.callout-note}
+I'll be writing the following code in a script called, `no_functions_pipeline.R`, which I'll save to my repo's root directory.
+:::
+
+## **i.** Load libraries
 ```{r}
 #| eval: true
 #| echo: true
@@ -16,11 +24,11 @@ library(naniar)
 library(ggridges)
 ```
 
-### **ii.** Import raw data 
+## **ii.** Import raw data 
 
 Either download from the [Environmental Data Portal](https://portal.edirepository.org/nis/home.jsp) (EDI) directly: 
 ```{r}
-#| eval: true
+#| eval: false
 #| echo: true
 #| message: false
 #| warning: false
@@ -29,7 +37,7 @@ Either download from the [Environmental Data Portal](https://portal.edirepositor
 # car <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2004.26&entityid=1d7769e33145ba4f04aa0b0a3f7d4a76")
 ```
 
-OR download files (they are large!) from [Google Drive](https://drive.google.com/drive/folders/1S2IY-qo29CU9ahRj_QNfFLfrh7DnT3CG?usp=share_link) and save to `data/raw_data/` (be sure to unzip them!):
+Or read in the downloaded files from `data/raw_data/`
 ```{r}
 #| eval: true
 #| echo: true
@@ -37,10 +45,10 @@ OR download files (they are large!) from [Google Drive](https://drive.google.com
 #| warning: false
 alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
 mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
-carpenteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
 ```
 
-### **iii.** Clean data 
+## **iii.** Clean data 
 
 Below, we select only the necessary columns (there are *far* too many (87) in the raw data), add a column for site name (the only way to tell which site the data were collected from is by looking at the file name), formatting dates/times, and replacing missing value codes with *`NA`*.
 ```{r}
@@ -51,16 +59,16 @@ Below, we select only the necessary columns (there are *far* too many (87) in th
 alegria_clean <- alegria |> 
   
   # keep only necessary columns & filter for years 2005-2020
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
   
   # add column with site name
   mutate(site = rep("Alegria Reef")) |> 
   
   # create date time column
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   
   # coerce data types
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
@@ -68,20 +76,20 @@ alegria_clean <- alegria |>
          month = as.factor(month),
          day = as.numeric(day)) |>
   
-  # add month name
+  # add month name (see: https://stackoverflow.com/questions/22058393/convert-a-numeric-month-to-a-month-abbreviation)
   mutate(month_name = as.factor(month.name[month])) |>
   
   # replace 9999s with NAs (will throw warning if var isn't present, but still execute)
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
   
   # select/reorder desired columns
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 
 ```
 
-### **iv.** Plot the data
+## **iv.** Plot the data
 
-Here, we create a ridgeline plot (using the `{ggridges}` package) showing aggregate bottom temperatures (2005-2020), by month, at Alegria reef.
+Here, we create a ridge line plot (using the `{ggridges}` package) showing aggregate bottom temperatures (2005-2020), by month, at Alegria reef.
 ```{r}
 #| eval: true
 #| echo: true
@@ -89,8 +97,10 @@ Here, we create a ridgeline plot (using the `{ggridges}` package) showing aggreg
 #| warning: false
 alegria_plot <- alegria_clean |> 
   
+  # group by month ----
   group_by(month_name) |> 
   
+  # plot ----
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
   geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
   scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
@@ -107,7 +117,7 @@ alegria_plot <- alegria_clean |>
 alegria_plot
 ```
 
-If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the `mohawk` and `carpenteria` data frames) -- this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g. forgetting to update a data frame name, typos, etc.). If you'd like to check out the code for the `mohawk` and `carpenteria` data sets, unfold the code chunk below:
+If we were to continue with this workflow (which is absolutely a valid way that gets the job done!), we would need to repeat the above code two more times (for both the `mohawk` and `carpinteria` data frames) -- this gets lengthy rather quickly, requires lots of copying/pasting, and is prone to errors (e.g. forgetting to update a data frame name, typos, etc.). If you'd like to check out the code for the `mohawk` and `carpinteria` data sets, unfold the code chunk below:
 
 ```{r}
 #| eval: true
@@ -119,23 +129,23 @@ If we were to continue with this workflow (which is absolutely a valid way that 
 
 #..........................Mohawk Reef...........................
 
-# clean
+# clean ----
 mohawk_clean <- mohawk |> 
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
   mutate(site = rep("Mohawk Reef")) |> 
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
          year = as.factor(year),
          month = as.factor(month),
          day = as.numeric(day)) |>
   mutate(month_name = as.factor(month.name[month])) |>
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 
-# plot
+# plot ----
 mohawk_plot <- mohawk_clean |> 
   group_by(month_name) |> 
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
@@ -153,26 +163,26 @@ mohawk_plot <- mohawk_clean |>
 
 mohawk_plot
 
-#........................Carpenteria Reef........................
+#........................Carpinteria Reef........................
 
-# clean
-carpenteria_clean <- carpenteria |> 
-  select("year", "month", "day", "decimal_time", "Temp_top", "Temp_mid", "Temp_bot") |>
+# clean ----
+carpinteria_clean <- carpinteria |> 
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
   filter(year %in% c(2005:2020)) |> 
-  mutate(site = rep("Carpenteria Reef")) |> 
-  unite(date, year, month, day, sep = "-", remove = FALSE) |> 
-  mutate(time = times(as.numeric(decimal_time))) |> 
-  unite(date_time, date, time, sep = " ", remove = TRUE) |> 
+  mutate(site = rep("Carpinteria Reef")) |> 
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
   mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
          year = as.factor(year),
          month = as.factor(month),
          day = as.numeric(day)) |>
   mutate(month_name = as.factor(month.name[month])) |>
   replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-  select("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
 
-# plot
-carpenteria_plot <- carpenteria_clean |> 
+# plot ----
+carpinteria_plot <- carpinteria_clean |> 
   group_by(month_name) |> 
   ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
   geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
@@ -180,12 +190,12 @@ carpenteria_plot <- carpenteria_clean |>
   scale_y_discrete(limits = rev(month.name)) + 
   scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
   labs(x = "Bottom Temperature (°C)",
-       title = "Bottom Temperatures at Carpenteria Reef, Santa Barbara, CA",
+       title = "Bottom Temperatures at Carpinteria Reef, Santa Barbara, CA",
        subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
   ggridges::theme_ridges(font_size = 13, grid = TRUE) +
   theme(
     axis.title.y = element_blank()
   )
 
-carpenteria_plot
+carpinteria_plot
 ```

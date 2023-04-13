@@ -1,0 +1,27 @@
+---
+format: html
+---
+
+# `r fontawesome::fa("file-lines", fill = "#5A5A5A", a11y = "sem")` How is this document organized?
+
+::: {.callout-warning}
+## This workshop is indended to be taught in-person
+I'll be doing a lot of writing code, then testing code, then adding a bit more code, rinsing, and repeating. That can be a bit hard to capture in an instructional document, but I've done my best to outline my iterative steps here for folks to refer back to, as-needed.
+:::
+
+This document follows just one case study -- creating functions and for loops for processing and visualizing ocean temperature data from a few Santa Barbara Coastal LTER rocky reef sites. I do this in three "Stages", each of which includes multiple steps/code versions:
+
+**`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Stage 1:** Clean and plot *one* data set -- *always* my first step when beginning any analysis
+
+-  this is a standard workflow that includes reading in the data, then cleaning and plotting at least one data set (I include these steps for all three data sets, for reference...this involves lots of copying and pasting large chunks of code!)
+
+**`r fontawesome::fa("person-running", fill = "#5A5A5A", a11y = "sem")` Stage 2:** Write functions to clean & plot your data -- getting a little fancier by turning long, repeated code chunks into functions   
+
+-  Here I create two separate functions, one to clean data and one to plot data -- for each, I take a super iterative approach (i.e. I start by creating a relatively simple function (that works!), then build in more flexibility/complexity)
+
+**`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Stage 3:** Write for loops to read in, clean, and plot all your data -- streamline processing all of our data sets using less code
+
+-  Once I've created functions that help to reduce the code needed for processing and plotting my data, I write a few for loops to read in, clean, and plot all files (while this may seem a bit silly for just three files, imagine having to process/plot dozens or more!). Again, I do this in a few separate steps so I can ensure each small piece works before adding in the next bit.
+  
+ADD TEXT ABOUT SYMBOL FOR LOOKING STUFF UP   
+ADD TEXT ABOUT ANNOTATIONS

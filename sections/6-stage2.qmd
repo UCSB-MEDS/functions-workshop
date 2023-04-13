@@ -1,0 +1,898 @@
+---
+format: html
+---
+
+# **`r fontawesome::fa("person-running", fill = "#5A5A5A", a11y = "sem")` Stage 2:** Write functions to clean & plot your data
+
+::: {.callout-note}
+## Where do I write/save my functions?
+While there's no hard and fast rule, I tend to create a subdirectory within my project (e.g. named `/R`, `/utils`, etc.) to house all my function scripts. I prefer to create a separate `.R` script for each of my functions, and name each file the same as the function itself (e.g. if I'm writing a function called `do_fun_thing()`, I'd save it to a script called `do_fun_thing.R`).
+
+You can then **source** your function files into whatever script (or `.rmd`/`.qmd` file) where you call that function (e.g. `source("utils/do_fun_thing.R")`. 
+
+**Note:** You *cannot* `source()` a `.rmd` or `.qmd` file into another file/script, therefore it's important to save functions to a `.R` file.
+
+Here, let's create the following:
+
+-  a `/utils` folder to store our functions scripts
+-  a `clean_ocean_temps.R` file (saved to `/utils`), where we'll write a function to clean our data
+-  a `plot_ocean_temps.R` file (saved to `/utils`), where we'll write a function to plot our data
+-  a `functions_pipeline.R` file (saved to the root directory), where we'll use our functions to clean and plot our data -- you can also read-in your data files here, just as we did in [Stage 1, part ii](http://localhost:7074/#ii.-import-raw-data)
+:::
+
+## **i.** Write a function to **clean** data sets
+
+It's helpful to first identify which parts of the cleaning code need to be generalized/made "flexible" so that any of our three data frames can be passed to it for cleaning. For us, that's the **name of the raw data frame** and the **site name character string** that's repeated for the length of the added `site` column (see annotation notes below the rendered code):
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- alegria |> # <1>
+  select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
+  filter(year %in% c(2005:2020)) |> 
+  mutate(site = rep("Alegria Reef")) |> # <2>
+  unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+  mutate(time = times(decimal_time)) |> 
+  unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+  mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+         year = as.factor(year),
+         month = as.factor(month),
+         day = as.numeric(day)) |>
+  mutate(month_name = as.factor(month.name[month])) |>
+  replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+  select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
+```
+1. the name of the raw data frame (here, `alegria`) needs to be generalized
+2. the site name character string that's repeated for the length of the added `site` column (here, **"Alegria Reef"**) needs to be generalized
+
+Now we can start to build out our function. We'll start by creating a super basic function, then build in more complexity. I encourage you to test out your function after each version to ensure that it works as you intend it to.
+
+::: {.callout-important}
+## Reminder
+We'll be writing our `clean_temp_data()` function in our `/utils/clean_temp_data.R` file!
+:::
+
+### **Version 1:** 
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `clean_ocean_temps()` Version 1
+Get a basic data cleaning function working 
+:::
+
+To start, let's create the skeleton of our function, which we'll call `clean_ocean_temps()`:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(){
+  
+}
+```
+
+Now, let's copy and paste our cleaning code for Alegria Reef data (from **Stage 1**, above) into the body of the function (i.e. within the curly brackets, `{}`).
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(){
+ 
+  alegria_clean <- alegria |> 
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("Alegria Reef")) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
+  
+}
+```
+
+Next, we want the ability to provide our function with any three of our data sets for processing. To do so, we'll make the following updates: 
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data){ # <1>
+  
+  # clean data ----
+  temps_clean <- raw_data |> # <2>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("___ Reef")) |> # <4>
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
+  
+  # return cleaned df ----
+  return(temps_clean) # <3>
+}
+```
+1.  create an input (aka **argument**) called `raw_data` inside `function()` (NOTE: you can name your argument however you'd like, but preferably something short and descriptive) 
+2.  replace our hard-coded data frame name (e.g. `alegria` in the previous code chunk) in our cleaning pipeline with `raw_data`
+3.  update the name of the object we save our clean data to (currently `alegria_clean`) to something a bit more generalized, like `temps_clean`, and `return()` our clean data frame object at the end of the function
+4.  recall that part of our cleaning pipeline includes adding a column called `site`, with repeating values that are the site name; for now, let's just add some placeholder text (*___ Reef*) and we'll figure out how to make that text match up with the data in the next versions of our function
+
+::: {.callout-note collapse="true"}
+## What is `return()` and when is it necessary?
+
+Oftentimes, we want a function to do some processing on whatever we provide it and then give us back the result. We use the `return()` function to do this in R. 
+
+R **automatically** returns the the last output of a function -- here, it isn't necessary to `return(temps_clean)` since the `temps_clean` data frame is the last output of our `clean_ocean_temps()` function.  
+
+An explicit `return()` is used to return a value immediately from a function. If it is *not* the last statement of a function, `return()` will prematurely end the function -- for example, if `x = 2`, the string, `"Positive"` will be returned (and the remaining `if else` statement will not be executed):
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+check_number <- function(x) {
+  if (x > 0) {
+    return("Positive")
+  }
+  else if (x < 0) {
+    return("Negative")
+  }
+  else {
+    return("Zero")
+  }
+}
+```
+
+I tend to include an explicit `return()` at the end of my functions because I think it makes it easier to read/understand the code, but check out [this interesting dialogue](https://stackoverflow.com/questions/11738823/explicitly-calling-return-in-a-function-or-not) on whether this is best practice or not.
+:::
+
+Lastly, let's make sure our function works. You can take a few approaches to trying out your work:
+
+1.  **test in the console:** I do this a lot! It's fast and allows you to test out different things if you encounter any sticking points. You'll see me doing that while teaching
+2.  **write and run your `functions_pipeline.R` script:** Begin writing your analysis script (here, that's `functions_pipeline.R`) -- below is one way you might consider setting up your script
+
+Regardless, make sure to always rerun/re-source your function after making changes so that an updated version gets saved to your global environment!
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+# functions_pipeline.R #
+
+#..........................load packages.........................
+library(readr)
+
+#........................source functions........................
+source("utils/clean_ocean_temps.R")
+
+#..........................import data...........................
+alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
+carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+
+#...........................clean data...........................
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
+```
+
+### **Version 2:** 
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `clean_ocean_temps()` Version 2
+Checking for and dependencies
+:::
+
+Before we get too far, it's probably a good idea to make sure any required dependencies are loaded with our function. **A good way to check that your function works as-is is to restart R, reload your data and your function, then use your function:**
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#......load in data using only the required packages (readr).....
+alegria <- readr::read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+mohawk <- readr::read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
+carpinteria <- readr::read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+
+#......................re-load your function.....................
+clean_ocean_temps <- function(raw_data){ 
+  
+  # clean data ----
+  temps_clean <- raw_data |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("___ Reef")) |>
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
+  
+  # return cleaned df ----
+  return(temps_clean) 
+  
+}
+
+#....................try using your function.....................
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
+```
+
+**Does it work?**
+
+If you're following along here, you most likely got an error message that says something like `...could not find function "select"`. We use lots of existing functions within `clean_ocean_temps()` that are called from external packages: `{dplyr}`, `{tidyr}`, `{chron}`, `{naniar}`. It's best not to assume that a user (including yourself) will have already installed and loaded those packages prior to trying to use `clean_ocean_temps()`. To fix this, we can make the following modifications to our function: 
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data){ 
+  
+  # load dependencies ---- # <1>
+  library(dplyr) 
+  library(tidyr)
+  library(chron)
+  library(naniar)
+  
+  # clean data ----
+  temps_clean <- raw_data |>
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep("___ Reef")) |>
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
+  
+  # return cleaned df ----
+  return(temps_clean) 
+  
+}
+```
+1. Load any dependencies (i.e. packages that are used within your function). To do this, call we can call `library()` inside our function to load any required packages before executing our cleaning code. If a user tries to use `clean_ocean_names()` but doesn't have a required package(s) already installed, it will return an error (e.g. `Error in library(x): there is no package called 'x'`).
+
+Again, rerun your updated function and try using it to make sure it works as intended:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
+```
+
+### **Version 3:** 
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `clean_ocean_temps()` Version 3
+Create a `site` column that contains the correct site name 
+:::
+
+Next, let's work on adding the appropriate site name to our `site` column. There are *many* creative ways to go about forming the site name that will get added as a repeating value to the `site` column -- two that came to mind to start were:
+
+a. adding a second function argument that takes a site name as a character string (e.g. `site_name = "Alegria Reef"`) 
+b. getting the site name from the raw data object name (e.g. the data `alegria_mooring_ale_20210617.csv` was saved to an object named `alegria`)
+
+Here, we'll opt for option (b) and make the following updates to our function:
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data){
+  
+  # load dependencies ----
+  library(dplyr) 
+  library(tidyr)
+  library(stringr) # <1>
+  library(chron)
+  library(naniar)
+ 
+  # get site name as character string from object (raw_data) name ----
+  site_name <- deparse(substitute(raw_data)) # <2>
+  site_name <- paste(str_to_title(site_name), "Reef") # <3>
+    
+  # clean data ----
+  temps_clean <- raw_data |> 
+    select(year, month, day, decimal_time, Temp_top, Temp_mid, Temp_bot) |>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep(site_name)) |> # <4>
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+          year = as.factor(year),
+          month = as.factor(month),
+          day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top)
+  
+  # return cleaned df ----
+  return(temps_clean) 
+  
+}
+```
+1. import the `{stringr}` package, since we'll be using `stringr::replace_with_na()` within our function
+2. use the `deparse()` and `substitute()` functions together to convert an object name (here, whichever data frame is passed in as `raw_data`) to a character string (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced this [resource](https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r )) 
+3. format our extracted character string (convert to Title Case and paste `"Reef"` at the end (e.g. `"alegria"` will become `"Alegria Reef"`) ; `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://stringr.tidyverse.org/reference/case.html)) 
+4. substitute our formatted character string, `site_name` in for the hard-coded site name in `mutate(site = rep("___ Reef"))`
+
+::: {.callout-note collapse="true"}
+## Understanding `deparse(substitute())`
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+alegria <- readr::read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+```
+
+If we were to assign just the `alegria` data frame to our new object,`site_name`, running `site_name` would return the entire `alegria` data frame (which we don't want!).
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+site_name <- alegria # assign the `alegria` object (which is a data frame) to a new object called `site_name`
+site_name # running `site_name` returns the data frame
+```
+
+`deparse(substitute())` converts the **name** of an object to a **character string**. If we assign `deparse(substitute(alegria))` to our new object, `site_name`, running `site_name` will return `"alegria"` as a character string (which we can then format to our liking and use to create a column of repeating site name values (as character strings) in our cleaned data frame).
+```{r}
+#| eval: true
+#| echo: true
+#| message: false
+#| warning: false
+site_name <- deparse(substitute(alegria)) # assigning deparse(substitute(alegria)) to a new object called `site_name`
+site_name # running `site_name` returns the name of the data frame as a character string
+```
+:::
+
+Rerun the updated function and try using it to make sure the appropriate site name is added to the `site_name` column for each of the data sets:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- clean_ocean_temps(raw_data = alegria)
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk)
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria)
+```
+
+### **Version 4:** 
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `clean_ocean_temps()` Version 4
+Allow users to select which temperature measurements (`Temp_top`, `Temp_mid`, `Temp_bot`) to include in the cleaned data frame
+:::
+
+Our function works perfectly fine as-is, but let's say we don't always want all three temperature measurements (surface temperature (`Temp_top`), mid-column temperature (`Temp_mid`), and bottom temperature (`Temp_top`)) included in our cleaned data. We can build flexibility into our function by adding an argument that allows the user to select exactly which of the three temperature measurements to include in the resulting cleaned data frame. To do this, we'll make the following changes:
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ # <1>
+  
+  # load dependencies ----
+  library(dplyr)
+  library(tidyr)
+  library(stringr)
+  library(chron)
+  library(naniar)
+  
+  # get site name as character string from object (raw_data) name ----
+  site_name <- deparse(substitute(raw_data)) 
+  site_name <- paste(str_to_title(site_name), "Reef") 
+  
+  # columns to select ---- 
+  always_selected_cols <- c("year", "month", "day", "decimal_time") # <2>
+  all_cols <- append(always_selected_cols, include_temps) # <2>
+  
+  # clean data ----
+  temps_clean <- raw_data |> 
+    select(all_of(all_cols)) |> # <3>
+    filter(year %in% c(2005:2020)) |> 
+    mutate(site = rep(site_name)) |> 
+    unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+    mutate(time = times(decimal_time)) |> 
+    unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+    mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+           year = as.factor(year),
+           month = as.factor(month),
+           day = as.numeric(day)) |>
+    mutate(month_name = as.factor(month.name[month])) |>
+    replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+    select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))) # <4>
+  
+  # return cleaned df ----
+  return(temps_clean) 
+}
+```
+1. add a second argument called `include_temps`, which defaults to including all three temperature variables (`Temp_top`, `Temp_mid`, `Temp_bot`)
+2. create a vector of variable names that the user wants to `select` for -- including both the "standard" variables (those columns that should always be selected), and user-specified temperature variables (those temperature columns that the user can choose using the `include_temps` argument)
+3. `select` columns based on variables names in our `all_cols` vector using `select(all_of())` (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I first got an error message [^1] when attempting to `select(all_cols)`, since an external vector alone can't be used to make `select`ions; I then referenced this [resource](https://tidyselect.r-lib.org/reference/all_of.html)) 
+4. make our last `select` call [^2], which is used to reorder columns, flexible enough to reorder temperature variables which may or may not be present using `select(any_of())` (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I again referenced this [resource](https://tidyselect.r-lib.org/reference/all_of.html))
+
+[^1]: The error message I got when attempting to run `select(all_cols)`:
+
+      `Using an external vector in selections was deprecated in tidyselect 1.1.0.`  
+      `ℹ Please use 'all_of()' or 'any_of()' instead.`   
+      `# Was:`   
+      `data %>% select(all_cols)`  
+      `# Now:`  
+      `data %>% select(all_of(all_cols))`   
+      `See <https://tidyselect.r-lib.org/reference/faq-external-vector.html>.`  
+      
+[^2]: `all_of()` and `any_of()` take a vector of character names, which is why all column names are in quotes, `""` (e.g. see `select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))))`
+
+Rerun the updated function and try out our new `inlcude_temps` argument: 
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot")) # includes only `Temp_bot`
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk) # includes all three temp cols (`Temp_top`, `Temp_mid`, `Temp_bot`) by default
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_mid", "Temp_bot")) # includes only `Temp_mid` & `Temp_bot`
+```
+
+::: {.callout-note}
+## **Note:** `naniar::replace_with_na()` may throw a warning message 
+However this will *not* halt execution -- if one or more of the temperature variables are missing (e.g. if we specify `include_temps = c("Temp_bot")`, you will get a warning that says, `Missing from data: Temp_top, Temp_mid`).
+:::
+
+### **Version 5:** 
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `clean_ocean_temps()` Version 5
+Build in checks to ensure that data provided to the function is compatible with the cleaning pipeline (i.e. ensure that the correct columns are present)
+:::
+
+To wrap things up, we might consider adding an `if else` statement that checks to ensure that the data provided is suitable for our cleaning pipeline:
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ 
+  
+  # load dependencies ----
+  library(dplyr) 
+  library(tidyr)
+  library(stringr) 
+  library(chron)
+  library(naniar)
+  
+  # if data contains these colnames, clean the script ----
+  if(all(c("year", "month", "day", "decimal_time", "Temp_bot", "Temp_top", "Temp_mid") %in% colnames(raw_data))) { # <1>
+    
+    message("Cleaning data...") # <1>
+    
+    # get site name as character string from object (raw_data) name ----
+    site_name <- deparse(substitute(raw_data)) 
+    site_name <- paste(str_to_title(site_name), "Reef") 
+    
+    # columns to select ----
+    standard_cols <- c("year", "month", "day", "decimal_time") 
+    all_cols <- append(standard_cols, include_temps) 
+    
+    # clean data ----
+    temps_clean <- raw_data |> 
+      select(all_of(all_cols)) |> 
+      filter(year %in% c(2005:2020)) |> 
+      mutate(site = rep(site_name)) |> 
+      unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = times(decimal_time)) |> 
+      unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+      mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+             year = as.factor(year),
+             month = as.factor(month),
+             day = as.numeric(day)) |>
+      mutate(month_name = as.factor(month.name[month])) |>
+      replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")))
+    
+    # return cleaned df ----
+    return(temps_clean) 
+    
+  } else { # <1>
+    
+    stop("The data frame provided does not include the necessary columns. Double check your data!") # <1>
+    
+  } # <1>
+  
+}
+```
+1. add an `if else` statement that checks whether the necessary columns are present in the raw data -- if yes, proceed with data cleaning; if no, throw an error message
+
+Let's rerun our function and try it out one last time: 
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+# these three should work as intended
+alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot")) 
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk) 
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_mid", "Temp_bot")) 
+
+# this should throw an error!
+penguins_clean <- clean_ocean_temps(raw_data = palmerpenguins::penguins) 
+```
+
+## **ii:** Write a function to **plot** data sets
+
+Similar to what we did for our cleaning code, let's first identify which parts of the plotting code need to be generalized/made "flexible" so that any of our three cleaned data frames can be passed to it for plotting. For us, that's the **name of the clean data frame** and the **site name** that appears in the plot title (see annotation notes below the rendered code):
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_plot <- alegria_clean |> # <1>
+  group_by(month_name) |> 
+  ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+  geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+  scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+  scale_y_discrete(limits = rev(month.name)) + 
+  scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+  labs(x = "Bottom Temperature (°C)",
+       title = "Bottom Temperatures at Alegria Reef, Santa Barbara, CA", # <2>
+       subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
+  ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+  theme(
+    axis.title.y = element_blank()
+  )
+
+alegria_plot
+```
+1. the name of the clean data frame needs to be generalized
+2. the site name that appears in the plot title needs to be generalized
+
+### **Version 1:** 
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `plot_ocean_temps()` Version 1
+Get a basic plotting function working
+:::
+
+Now we can begin to building our function. Let's again start by creating the skeleton of our function, which we’ll call `plot_ocean_temps()`:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+plot_ocean_temps <- function(){
+  
+}
+```
+
+...then copy and paste our plotting code for the clean Alegria Reef data into the body of the function (i.e. within the curly brackets, `{}`).
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+plot_ocean_temps <- function() {
+
+  alegria_plot <- alegria_clean |> 
+    group_by(month_name) |> 
+    ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+    geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+    scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+    scale_y_discrete(limits = rev(month.name)) + 
+    scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+    labs(x = "Bottom Temperature (°C)",
+         title = "Bottom Temperatures at Alegria Reef, Santa Barbara, CA",
+         subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
+    ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.y = element_blank()
+    )
+  
+}
+```
+
+Just like in `clean_ocean_temps()`, we want the ability to provide our function with any three of our cleaned data sets for plotting. To do this, we'll make the following modifications:
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+plot_ocean_temps <- function(clean_data) { # <1>
+  
+  # load dependencies ---- # <4>
+  library(dplyr)
+  library(ggplot2)
+  library(ggridges)
+
+  # plot data ----
+  temps_plot <- clean_data |> # <2>
+    group_by(month_name) |> 
+    ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+    geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+    scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+    scale_y_discrete(limits = rev(month.name)) + 
+    scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+    labs(x = "Bottom Temperature (°C)",
+         title = "Bottom Temperatures at ___ Reef, Santa Barbara, CA", # <5>
+         subtitle = "Temperatures (°C) aggregated by month from 2005 - 2020") +
+    ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.y = element_blank()
+    )
+  
+  # return plot ----
+  return(temps_plot) # <3>
+  
+}
+```
+1. create an input (aka argument) called `clean_data` inside `function()` (NOTE: you can name your argument however you’d like, but preferably something short and descriptive)
+2. replace our hard-coded data frame name (e.g. `alegria_clean` in the code above) in our plotting pipeline with `clean_data`
+3. update the name of the object we save our plot output to (currently `alegria_plot`) to something a bit more generalized, like `temps_plot` and `return()` our plot object at the end
+4. don't forget to load any dependencies within the function!
+5. and add some placeholder text (*___ Reef*) in the `title` field -- we'll make this flexible in our next version
+
+Now let's make sure our function works. Run the function so that it's saved to our global environment, then use it to try plotting our cleaned data sets:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_plot <- plot_ocean_temps(clean_data = alegria_clean) 
+mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean) 
+```
+
+### **Version 2:**
+
+::: {.callout-important appearance="simple"}
+## Primary Goal of `plot_ocean_temps()` Version 2
+:::
+
+In this next version, let's figure out how to update the plot `title` so that the appropriate site name appears each time a different data set is plotted. Luckily for us, we've already added a `site` column to our `*_clean` data, which contains the site name as a character string. We can extract this site name by adding the following:
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+plot_ocean_temps <- function(clean_data) { 
+  
+  # load dependencies ----
+  library(dplyr)
+  library(ggplot2)
+  library(ggridges)
+  
+  # get site name for plot title ----
+  site_name <- unique(clean_data$site) # <1>
+  
+  # plot data ----
+  temp_plot <- clean_data |> 
+    group_by(month_name) |> 
+    ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+    ggridges::geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+    scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+    scale_y_discrete(limits = rev(month.name)) + 
+    scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+    labs(x = "Bottom Temperature (°C)",
+         title = paste("Bottom Temperatures at ",  site_name, ", Santa Barbara, CA", sep = ""), # <2>
+         subtitle = "Temperatures (°C) aggregated by month from 2005 - 2022") +
+    ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.y = element_blank()
+    )
+  
+  # return plot ----
+  return(temp_plot)
+}
+```
+1. use the `unique()` function to get the site name for a given data set
+2. use the `paste()` function to construct a `title` using our extracted site name
+
+Rerun and try out your function again to make sure it works as expected:
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+alegria_plot <- plot_ocean_temps(clean_data = alegria_clean) 
+mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean) 
+```
+
+### **iii:** Putting it all together
+
+Okay, now let's bring all these pieces together! Our revised scripts might look something like this:
+
+::: {.panel-tabset}
+## `functions_pipeline.R`
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#..........................load packages.........................
+library(readr)
+
+#........................source functions........................
+source("utils/clean_ocean_temps.R")
+source("utils/plot_ocean_temps.R")
+
+#..........................import data...........................
+alegria <- read_csv(here::here("data", "raw_data", "alegria_mooring_ale_20210617.csv"))
+mohawk <- read_csv(here::here("data", "raw_data", "mohawk_mooring_mko_20220330.csv"))
+carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_20220330.csv"))
+
+#...........................clean data...........................
+alegria_clean <- clean_ocean_temps(raw_data = alegria, include_temps = c("Temp_bot")) 
+mohawk_clean <- clean_ocean_temps(raw_data = mohawk, include_temps = c("Temp_bot")) 
+carpinteria_clean <- clean_ocean_temps(raw_data = carpinteria, include_temps = c("Temp_bot")) 
+
+#............................plot data...........................
+alegria_plot <- plot_ocean_temps(clean_data = alegria_clean) 
+mohawk_plot <- plot_ocean_temps(clean_data = mohawk_clean)
+carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean) 
+```
+
+## `utils/clean_ocean_temps.R`
+::: {.callout-note}
+## Use a roxygen skeleton to document your function
+Even if you don't plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation -- the [`{roxygen2}`](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) package helps to make that process easier. Click anywhere inside your function, then choose Code > Insert Roxygen Skeleton to get started. 
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#' Process CDT/ADCP temperature data
+#'
+#' @param raw_data data frame of CTD/ADCP data collected at SBC LTER site moorings; search for data on the EDI Data Portal (http://portal.edirepository.org:80/nis/simpleSearch?defType=edismax&q=SBC+LTER%5C%3A+Ocean%5C%3A+Currents+and+Biogeochemistry%5C%3A+Moored+CTD+and+ADCP+data&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false)
+#' @param include_temps vector of character strings that includes one or more of the following variable names: Temp_top, Temp_mid, Temp_top
+#'
+#' @return a data frame
+#' @export
+#'
+#' @examples
+#' my_clean_df <- clean_ocean_temps(raw_data = my_raw_df, include_temps = c("Temp_bot"))
+clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ 
+  
+  # load dependencies ----
+  library(dplyr) 
+  library(tidyr)
+  library(stringr) 
+  library(chron)
+  library(naniar)
+  
+  # if data contains these colnames, clean the script ----
+  if(all(c("year", "month", "day", "decimal_time", "Temp_bot", "Temp_top", "Temp_mid") %in% colnames(raw_data))) { 
+    
+    message("Cleaning data...") 
+    
+    # get site name as character string from object (raw_data) name ----
+    site_name <- deparse(substitute(raw_data)) 
+    site_name <- paste(str_to_title(site_name), "Reef") 
+    
+    # columns to select ----
+    standard_cols <- c("year", "month", "day", "decimal_time") 
+    all_cols <- append(standard_cols, include_temps) 
+    
+    # clean data ----
+    temps_clean <- raw_data |> 
+      select(all_of(all_cols)) |> 
+      filter(year %in% c(2005:2020)) |> 
+      mutate(site = rep(site_name)) |> 
+      unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
+      mutate(time = times(decimal_time)) |> 
+      unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
+      mutate(date_time = as.POSIXct(date_time, "%Y-%m-%d %H:%M:%S", tz = "GMT"),
+             year = as.factor(year),
+             month = as.factor(month),
+             day = as.numeric(day)) |>
+      mutate(month_name = as.factor(month.name[month])) |>
+      replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
+      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")))
+    
+    # return cleaned df ----
+    return(temps_clean) 
+    
+  } else { 
+    
+    stop("The data frame provided does not include the necessary columns. Double check your data!") 
+    
+  }
+  
+}
+```
+
+## `utils/plot_ocean_temps.R`
+
+::: {.callout-note}
+## Use a roxygen skeleton to document your function
+Even if you don't plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation -- the [`{roxygen2}`](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) package helps to make that process easier. Click anywhere inside your function, then choose Code > Insert Roxygen Skeleton to get started. 
+:::
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+#' Create ridge line plot of CDT/ADCP bottom temperature data
+#'
+#' @param clean_data a data frame that has been pre-processed using clean_ocean_temp()
+#'
+#' @return a plot object
+#' @export
+#'
+#' @examples
+#' my_plot <- plot_ocean_temps(clean_data = my_clean_df)
+plot_ocean_temps <- function(clean_data) { 
+  
+  # load dependencies ----
+  library(dplyr)
+  library(ggplot2)
+  library(ggridges)
+  
+  # get site name for plot title ----
+  site_name <- unique(clean_data$site)
+  
+  # plot data ----
+  temp_plot <- clean_data |> 
+    group_by(month_name) |> 
+    ggplot(aes(x = Temp_bot, y = month_name, fill = after_stat(x))) +
+    ggridges::geom_density_ridges_gradient(rel_min_height = 0.01, scale = 3) + 
+    scale_x_continuous(breaks = c(9, 12, 15, 18, 21)) +
+    scale_y_discrete(limits = rev(month.name)) + 
+    scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
+    labs(x = "Bottom Temperature (°C)",
+         title = paste("Bottom Temperatures at ",  site_name, ", Santa Barbara, CA", sep = ""), 
+         subtitle = "Temperatures (°C) aggregated by month from 2005 - 2022") +
+    ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.y = element_blank()
+    )
+  
+  # return plot ----
+  return(temp_plot)
+}
+```
+
+:::

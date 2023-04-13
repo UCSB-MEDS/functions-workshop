@@ -1,0 +1,10 @@
+---
+format: html
+---
+
+# `r fontawesome::fa("folder-tree", fill = "#5A5A5A", a11y = "sem")` Setup
+
+1. create and clone a GitHub repository (be sure to add a `.gitignore` file)
+2. download the data -- these data are publicly available via the [EDI Data Portal](https://portal.edirepository.org/nis/home.jsp), but I've also added the necessary files to Google Drive for download [here](https://drive.google.com/drive/folders/1S2IY-qo29CU9ahRj_QNfFLfrh7DnT3CG?usp=share_link) -- these are *large* data files and take a few minutes to download; be sure to unzip the files once downloaded
+3. add a subdirectory called `/data`; move your unzipped `raw_data` folder into the `/data` subdirectory; your folder structure should now look like: `your-repo/data/raw_data`
+4. add your `/raw_data` folder to your `.gitignore` file so that you don't accidentally try pushing it to GitHub (these data files are far too large for that!) -- to do so, scroll to the bottom of your `.gitignore`, type the following, `data/raw_data/`, and save; you can push this modified `.gitignore` file to GitHub now, if you'd like
