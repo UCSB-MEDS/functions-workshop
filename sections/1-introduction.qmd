@@ -2,12 +2,16 @@
 format: html
 ---
 
-Some text about the benefits of using functions & for loops -- jumpinng into the deep end is challenging for anyone. important to make this an iterative process
+By now, you may have heard instructors or online resources quote the saying, "If you've copied a block of code more than twice, you should probably consider writing a function." 
 
-## `r fontawesome::fa("table", fill = "#5A5A5A", a11y = "sem")` About the Data
+As your analyses get longer and more complex, the chances that you'll benefit from writing functions will also increase -- many times, this is to minimize the amount of code you need to copy/paste, but writing functions can also help to make your code:
 
-Let's say I want to look at ocean temperature data from three coastal sites within the Santa Barbara Coastal (SBC) LTER: Alegria Reef, Mohawk Reef, Carpenteria Reef. Data are collected by moored instrumentation (CTD & ADCP) at each site. Raw data are available for download on the EDI Data Portal:
+-  more navigable (e.g. by partitioning your code and functions into separate files)
+-  more readable (e.g. creating human-readable function names that tell a user exactly what to expect)
+-  less prone to errors (e.g. less copying/pasting large code chunks means less opportunity to introduce bugs)
 
-  1. Alegria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2008.14>
-  2. Mohawk Reef: <https://doi.org/10.6073/pasta/cbe43646b801bf6ee5231c301ea23f51>
-  3. Carpenteria Reef: <https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.2004.26>
+Iteration (i.e. performing the same operation on multiple inputs, e.g. multiple data sets, columns, etc.) is another tool for reducing duplication -- for loops are one approach for performing iterative tasks. Together, both functions and for loops provide a powerful means to streamlining your analytical pipelines.
+
+*However*, whether you're a new learner or seasoned programmer, it can sometimes feel overwhelming to know exactly where to start -- especially when you have an end goal that builds additional complexity/flexibility into your functions and for loops. Taking an iterative approach to building out your code can help make this process clearer, less daunting, and more fun. 
+
+This document walks through *my* own iterative process for writing a couple functions and for loops to clean and visualize multiple, similar data sets. The way I've written this code is certainly not the *only* way (and likely not even the most optimized way), but I hope that by stepping through how I slowly build out my functions to be more flexible and user-friendly, it might help demonstrate an iterative workflow that I find particularly effective.
