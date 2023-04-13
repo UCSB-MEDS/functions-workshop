@@ -27,6 +27,7 @@ library(ggridges)
 ## **ii.** Import raw data 
 
 Either download from the [Environmental Data Portal](https://portal.edirepository.org/nis/home.jsp) (EDI) directly: 
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -37,7 +38,8 @@ Either download from the [Environmental Data Portal](https://portal.edirepositor
 # car <- read_csv("https://portal.edirepository.org/nis/dataviewer?packageid=knb-lter-sbc.2004.26&entityid=1d7769e33145ba4f04aa0b0a3f7d4a76")
 ```
 
-Or read in the downloaded files from `data/raw_data/`
+Or read in the downloaded files from `data/raw_data/`:
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -51,6 +53,7 @@ carpinteria <- read_csv(here::here("data", "raw_data", "carpinteria_mooring_car_
 ## **iii.** Clean data 
 
 Below, we select only the necessary columns (there are *far* too many (87) in the raw data), add a column for site name (the only way to tell which site the data were collected from is by looking at the file name), formatting dates/times, and replacing missing value codes with *`NA`*.
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -90,6 +93,7 @@ alegria_clean <- alegria |>
 ## **iv.** Plot the data
 
 Here, we create a ridge line plot (using the `{ggridges}` package) showing aggregate bottom temperatures (2005-2020), by month, at Alegria reef.
+
 ```{r}
 #| eval: true
 #| echo: true

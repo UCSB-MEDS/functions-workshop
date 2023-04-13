@@ -62,6 +62,7 @@ Get a basic data cleaning function working
 :::
 
 To start, let's create the skeleton of our function, which we'll call `clean_ocean_temps()`:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -73,6 +74,7 @@ clean_ocean_temps <- function(){
 ```
 
 Now, let's copy and paste our cleaning code for Alegria Reef data (from **Stage 1**, above) into the body of the function (i.e. within the curly brackets, `{}`).
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -168,6 +170,7 @@ Lastly, let's make sure our function works. You can take a few approaches to try
 2.  **write and run your `functions_pipeline.R` script:** Begin writing your analysis script (here, that's `functions_pipeline.R`) -- below is one way you might consider setting up your script
 
 Regardless, make sure to always rerun/re-source your function after making changes so that an updated version gets saved to your global environment!
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -282,6 +285,7 @@ clean_ocean_temps <- function(raw_data){
 1. Load any dependencies (i.e. packages that are used within your function). To do this, call we can call `library()` inside our function to load any required packages before executing our cleaning code. If a user tries to use `clean_ocean_names()` but doesn't have a required package(s) already installed, it will return an error (e.g. `Error in library(x): there is no package called 'x'`).
 
 Again, rerun your updated function and try using it to make sure it works as intended:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -361,6 +365,7 @@ alegria <- readr::read_csv(here::here("data", "raw_data", "alegria_mooring_ale_2
 ```
 
 If we were to assign just the `alegria` data frame to our new object,`site_name`, running `site_name` would return the entire `alegria` data frame (which we don't want!).
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -371,6 +376,7 @@ site_name # running `site_name` returns the data frame
 ```
 
 `deparse(substitute())` converts the **name** of an object to a **character string**. If we assign `deparse(substitute(alegria))` to our new object, `site_name`, running `site_name` will return `"alegria"` as a character string (which we can then format to our liking and use to create a column of repeating site name values (as character strings) in our cleaned data frame).
+
 ```{r}
 #| eval: true
 #| echo: true
@@ -382,6 +388,7 @@ site_name # running `site_name` returns the name of the data frame as a characte
 :::
 
 Rerun the updated function and try using it to make sure the appropriate site name is added to the `site_name` column for each of the data sets:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -461,6 +468,7 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
 [^2]: `all_of()` and `any_of()` take a vector of character names, which is why all column names are in quotes, `""` (e.g. see `select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top"))))`
 
 Rerun the updated function and try out our new `inlcude_temps` argument: 
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -542,6 +550,7 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
 1. add an `if else` statement that checks whether the necessary columns are present in the raw data -- if yes, proceed with data cleaning; if no, throw an error message
 
 Let's rerun our function and try it out one last time: 
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -593,6 +602,7 @@ Get a basic plotting function working
 :::
 
 Now we can begin to building our function. Let's again start by creating the skeleton of our function, which we’ll call `plot_ocean_temps()`:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -604,6 +614,7 @@ plot_ocean_temps <- function(){
 ```
 
 ...then copy and paste our plotting code for the clean Alegria Reef data into the body of the function (i.e. within the curly brackets, `{}`).
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -671,6 +682,7 @@ plot_ocean_temps <- function(clean_data) { # <1>
 5. and add some placeholder text (*___ Reef*) in the `title` field -- we'll make this flexible in our next version
 
 Now let's make sure our function works. Run the function so that it's saved to our global environment, then use it to try plotting our cleaned data sets:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -728,6 +740,7 @@ plot_ocean_temps <- function(clean_data) {
 2. use the `paste()` function to construct a `title` using our extracted site name
 
 Rerun and try out your function again to make sure it works as expected:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -743,7 +756,9 @@ carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean)
 Okay, now let's bring all these pieces together! Our revised scripts might look something like this:
 
 ::: {.panel-tabset}
+
 ## `functions_pipeline.R`
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -773,6 +788,7 @@ carpinteria_plot <- plot_ocean_temps(clean_data = carpinteria_clean)
 ```
 
 ## `utils/clean_ocean_temps.R`
+
 ::: {.callout-note}
 ## Use a roxygen skeleton to document your function
 Even if you don't plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation -- the [`{roxygen2}`](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) package helps to make that process easier. Click anywhere inside your function, then choose Code > Insert Roxygen Skeleton to get started. 

@@ -34,8 +34,6 @@ It can be easy to lose track of what's happening inside for loops, particularly 
 
 ### **Step 1:**
 
-<!-- 1.  get list of files that you want to work with -->
-<!-- 2.  create the skeleton of a for loop to iterate over that list of files -->
 ```{r}
 #| eval: false
 #| echo: true
@@ -218,6 +216,7 @@ Okay, now let's bring all these pieces together! Our revised scripts might look 
 ```
 
 ## `utils/clean_ocean_temps.R`
+
 ::: {.callout-note}
 ## Use a roxygen skeleton to document your function
 Even if you don't plan to publish your function as part of a package, documenting your work is still a critical part of reproducibility and usability. This may be done in more informal ways, such as code annotations and text explanations in RMarkdown documents, for example. You may also consider more formal documentation -- the [`{roxygen2}`](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) package helps to make that process easier. Click anywhere inside your function, then choose Code > Insert Roxygen Skeleton to get started. 
