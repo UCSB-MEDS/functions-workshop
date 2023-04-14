@@ -198,15 +198,15 @@ for (i in 1:length(raw_df)) {
 
 ```{r}
 # get list of clean df names
-clean_df <- c("alegria_clean", "carpinteria_clean", "mohawk_clean")
+clean_dfs <- c("alegria_clean", "carpinteria_clean", "mohawk_clean")
 
-for (i in 1:length(clean_df)) {
+for (i in 1:length(clean_dfs)) {
   
   # print message ----
-  message("plotting df ", i, ": -------- ", clean_df[i], " --------")
+  message("plotting df ", i, ": -------- ", clean_dfs[i], " --------")
   
   # create plot name ----
-  clean_df_name <- clean_df[i]
+  clean_df_name <- clean_dfs[i]
   site_name <- stringr::str_split_1(clean_df_name, "_")[1]
   plot_name <- paste0(site_name, "_plot")
   

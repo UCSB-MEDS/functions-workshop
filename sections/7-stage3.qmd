@@ -92,8 +92,8 @@ for (i in 1:length(temp_files)){
 ```
 1. get a file from your list of `temp_files` and save it to an object named `file_name` (or something intuitive)
 2. print a helpful message so that you know which file your for loop is currently iterating on
-3. split apart the file name at "_" using `stringr::str_split_1()` -- this function takes a single string and returns a character vector (e.g. `"alegria_mooring_ale_20210617.csv"` > `"alegria"      "mooring"      "ale"          "20210617.csv"`)
-4. get the first element of the vector, which is the name of the site (i.e. `"alegria"`; `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced this [resource](https://stringr.tidyverse.org/reference/str_split.html)); this will become the name of the object that our raw data is saved to 
+3. split apart the file name at "_" using `stringr::str_split_1()` -- this function takes a single string and returns a character vector (e.g. `"alegria_mooring_ale_20210617.csv"` > `"alegria"      "mooring"      "ale"          "20210617.csv"`; `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced this [resource](https://stringr.tidyverse.org/reference/str_split.html))
+4. get the first element of the vector, which is the name of the site (i.e. `"alegria"`); this will become the name of the object that our raw data is saved to 
 5. print another helpful message 
 
 ### **Step 3:**
@@ -124,7 +124,7 @@ for (i in 1:length(temp_files)){
   
 }
 ```
-1. assign the data that you're reading in to the object name you created using the `assign()` function (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop))
+1. assign the data that you're reading in to the object name you created using the `assign()` function, where `x` is the object name and `value` is the value assigned to `x` (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://statisticsglobe.com/r-write-read-multiple-csv-files-for-loop))
 
 ## **ii.** Write a for loop to **clean** all data
 
@@ -170,13 +170,13 @@ for (i in 1:length(raw_dfs)) {
   
   # create new df name to assign clean data to ----
   df_name <- raw_dfs[i] # <2>
-  df_clean_name <- paste0(df_name, "_clean") # <2>
-  message("New df will be named: ", df_clean_name) # <1>
+  df_clean_name <- paste0(df_name, "_clean") # <3>
+  message("New df will be named: ", df_clean_name) # <4>
 
 }
 ```
 1. add a message that lets us know which data frame is currently being processed
-2. get a data frame from our list of `raw_data` and save it to an object called `df_name` (or something intuitive)
+2. get a data frame from our list of `raw_dfs` and save it to an object called `df_name` (or something intuitive)
 3. build the object name that we'll save our cleaned data frame to -- we want this to be in the format `*_clean`, where `*` is the site name (e.g. `alegria_clean`); we can use the `paste()` function on `df_name` to do this
 4. add a helpful message so we can easily keep track of what our for loop is doing
 
@@ -193,17 +193,18 @@ for (i in 1:length(raw_dfs)) {
 # get vector of dfs to clean ----
 raw_dfs <- c("alegria", "mohawk", "carpinteria")
 
-# the first element of our vector, `raw_data` (which is a character string)
-first_df_name <- raw_dfs[1]
+# the first element of our vector, `raw_data` (which is a character string) ----
+first_df_name <- raw_dfs[1] # <1>
 
-# call an object from environment using the  ----
-test <- get(first_df_name) # <1>
+# call an object from environment using `get()`  ----
+test <- get(first_df_name) # <2>
 
 # combining the two steps above into one ----
-test <- get(raw_dfs[1]) # <2>
+test <- get(raw_dfs[1]) # <3>
 ```
-1. figure out how to call objects from the environment using variable names (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get))
-2. combining both the previous steps into one line of code
+1. get the first element from our list of `raw_dfs` (i.e. `alegria`)
+2. figure out how to call objects from the environment using variable names (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get))
+3. combine both the previous steps into one line of code
 
 ### **Step 3:** 
 
@@ -243,27 +244,167 @@ for (i in 1:length(raw_dfs)) {
 ### **Step 1:**
 
 ***The primary goal of step 1 is to get a list of elements (in our case, cleaned data frame objects) to iterate over. We'll also create the skeleton of our for loop which will be used to iterate over those data frames***
+
 ```{r}
 #| eval: false
 #| echo: true
 #| message: false
 #| warning: false
+# get list of dfs to plot ----
+clean_dfs <- c("alegria_clean", "mohawk_clean", "carpinteria_clean") # <1>
+
+# for loop to plot dfs using `plot_ocean_temps()` ----
+for (i in 1:length(clean_dfs)) { # <2>
+  
+} # <2>
 ```
+1. create a vector of data frame names that you want to plot
+2. create the skeleton of your for loop for iterating over that vector of names
+
+### **Step 2:**
+
+***The primary goal of step 2 is to create an object name that we'll save our plot to once it's created using `plot_ocean_temps()`.***
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+# get list of dfs to plot ----
+clean_dfs <- c("alegria_clean", "mohawk_clean", "carpinteria_clean") 
+
+# for loop to plot dfs using `plot_ocean_temps()` -----
+for (i in 1:length(clean_dfs)) { 
+  
+  # print message ----
+  message("plotting df ", i, ": -------- ", clean_df[i], " --------") # <1>
+  
+  # create plot name ----
+  clean_df_name <- clean_dfs[i] # <2>
+  site_name <- stringr::str_split_1(clean_df_name, "_")[1] # <3>
+  plot_name <- paste0(site_name, "_plot") # <4>
+  
+} 
+```
+1. add a message that lets us know which data frame is currently being processed
+2. get a data frame from our list of `clean_dfs` and save it to an object called `clean_df_name` (or something intuitive)
+3. split the data frame name to isolate just the site name portion (e.g. isolate `"alegria"` from `"alegria_clean"`)
+4. build the object name that we'll save our plot to -- we want this to be in the format `*_plot`, where `*` is the site name (e.g. `alegria_plot`); we can use the `paste()` function on `site_name` to do this
+
+### **Step 3:**
+
+***The primary goal of step 3 is to assign the plot to the object name we just created.***
+
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+# get list of dfs to plot ----
+clean_dfs <- c("alegria_clean", "mohawk_clean", "carpinteria_clean") 
+
+# for loop to plot dfs using `plot_ocean_temps()` -----
+for (i in 1:length(clean_dfs)) { 
+  
+  # print message ----
+  message("plotting df ", i, ": -------- ", clean_df[i], " --------")
+  
+  # create plot name ----
+  clean_df_name <- clean_dfs[i]
+  site_name <- stringr::str_split_1(clean_df_name, "_")[1]
+  plot_name <- paste0(site_name, "_plot")
+  
+  # plot data ----
+  assign(x = plot_name, value = plot_ocean_temps(clean_data = get(clean_dfs[i]))) # <1>
+  
+} 
+```
+1. assign the plot output to the object name, `plot_name` (just as we did when we read in data earlier)
 
 ## **iv.** Putting it all together
 
 Okay, now let's bring all these pieces together! Our revised scripts might look something like this (**Note:** the two function scripts remain unchanged):
 
 ::: {.panel-tabset}
-## `my_analysis.R`
+## `forloops_pipeline.R`
 ```{r}
 #| eval: false
 #| echo: true
 #| message: false
 #| warning: false
+
+#..........................load packages......................... 
+library(readr)
+library(dplyr) 
+library(tidyr)
+library(stringr) 
+library(chron)
+library(naniar)
+library(ggplot2)
+library(ggridges) 
+
+#........................source functions........................
+source("utils/clean_ocean_temps.R")
+source("utils/plot_ocean_temps.R")
+
 #..........................import data...........................
-#...........................clean data..........................
+# get list of temp files ----
+temp_files <- list.files(path = "data/raw_data", pattern = ".csv")
+
+# for loop to read in each file ----
+for (i in 1:length(temp_files)){
+  
+  # get the object name from the file name ----
+  file_name <- temp_files[i]
+  message("Reading in: ", file_name)
+  split_name <- stringr::str_split_1(file_name, "_")
+  site_name <- split_name[1]
+  message("Saving to object name: ", site_name)
+  
+  # read in csv and assign to our object name
+  assign(x = site_name, value = readr::read_csv(here::here("data", "raw_data", file_name)))
+}
+
+ #...........................clean data...........................
+# get list of dfs to clean ----
+raw_dfs <- c("alegria", "mohawk", "carpinteria")
+
+# for loop to clean dfs using `clean_ocean_temps()` ----
+for (i in 1:length(raw_dfs)) {
+  
+  # print message ----
+  message("cleaning df ", i, ": -------- ", raw_dfs[i], " --------")
+  
+  # create new df name to assign cleaned data to ----
+  df_name <- raw_dfs[i]
+  df_clean_name <- paste0(df_name, "_clean")
+  message("New df will be named: ", df_clean_name)
+  
+  # ----
+  assign(x = df_clean_name, value = clean_ocean_temps(raw_data = get(raw_dfs[i]), site_name = df_name, include_temps = c("Temp_top", "Temp_bot")))
+  
+  message("------------------------------------")
+}
+
 #............................plot data...........................
+# get list of dfs to plot ----
+clean_dfs <- c("alegria_clean", "mohawk_clean", "carpinteria_clean") 
+
+# for loop to plot dfs using `plot_ocean_temps()` -----
+for (i in 1:length(clean_dfs)) { 
+  
+  # print message ----
+  message("plotting df ", i, ": -------- ", clean_dfs[i], " --------")
+  
+  # create plot name ----
+  clean_df_name <- clean_dfs[i]
+  site_name <- stringr::str_split_1(clean_df_name, "_")[1]
+  plot_name <- paste0(site_name, "_plot")
+  
+  # plot data ----
+  assign(x = plot_name, value = plot_ocean_temps(clean_data = get(clean_dfs[i])))
+  
+} 
 ```
 
 ## `utils/clean_ocean_temps.R`
