@@ -288,7 +288,7 @@ for (i in 1:length(clean_dfs)) {
 ```
 1. add a message that lets us know which data frame is currently being processed
 2. get a data frame from our list of `clean_dfs` and save it to an object called `clean_df_name` (or something intuitive)
-3. split the data frame name to isolate just the site name portion (e.g. isolate `"alegria"` from `"alegria_clean"`)
+3. split the data frame name to isolate just the site name portion (e.g. isolate `"alegria"` from `"alegria_clean"`) (**Note:** `stringr::str_split_1` was previously deprecated, but brought back in `{stringr}` v1.5.0 -- you may need to update your package version if you have trouble using this function)
 4. build the object name that we'll save our plot to -- we want this to be in the format `*_plot`, where `*` is the site name (e.g. `alegria_plot`); we can use the `paste()` function on `site_name` to do this
 
 ### **Step 3:**

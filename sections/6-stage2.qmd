@@ -238,7 +238,7 @@ clean_ocean_temps <- function(raw_data, site_name){ # <1>
   
 }
 ```
-1. use the `deparse()` and `substitute()` functions together to convert an object name (here, whichever data frame is passed in as `raw_data`) to a character string (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced this [resource](https://statisticsglobe.com/convert-name-of-data-object-to-character-string-in-r )) 
+1. add a second argument called `site_name` (or something intuitive)
 2. we might specify in our function documentation that `site_name` takes the standard site name (as used by SBC LTER) as a character string, but what happens if a users uses different character casing than expected (e.g. `"alegria"`, `"MOHAWK"`, `"Carpinteria"`)? We can use a combination of `paste()` and the `{stringr}` package to format that value as we'd like it to appear in our `site` column -- here, that's converting it to Title Case and pasting `"Reef"` at the end (e.g. `"alegria"` will become `"Alegria Reef"`) ; `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://stringr.tidyverse.org/reference/case.html)) 
 3. substitute our formatted character string, `site_name_formatted`, in for the hard-coded site name in `mutate(site = rep("___ Reef"))`
 
