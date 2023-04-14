@@ -9,6 +9,8 @@ format: html
 I'll be doing a lot of writing code, then testing code, then adding a bit more code, rinsing, and repeating. That can be a bit hard to capture in an instructional document, but I've done my best to outline my iterative steps here for folks to refer back to, as-needed.
 :::
 
+## Sections
+
 This document follows just one case study -- creating functions and for loops for processing and visualizing ocean temperature data from a few Santa Barbara Coastal LTER rocky reef sites. I do this in three "Stages", each of which includes multiple steps/code versions:
 
 **`r fontawesome::fa("person-walking", fill = "#5A5A5A", a11y = "sem")` Stage 1:** Clean and plot *one* data set -- *always* my first step when beginning any analysis
@@ -22,6 +24,11 @@ This document follows just one case study -- creating functions and for loops fo
 **`r fontawesome::fa("rocket", fill = "#5A5A5A", a11y = "sem")` Stage 3:** Write for loops to read in, clean, and plot all your data -- streamline processing all of our data sets using less code
 
 -  Once I've created functions that help to reduce the code needed for processing and plotting my data, I write a few for loops to read in, clean, and plot all files (while this may seem a bit silly for just three files, imagine having to process/plot dozens or more!). Again, I do this in a few separate steps so I can ensure each small piece works before adding in the next bit.
-  
-ADD TEXT ABOUT SYMBOL FOR LOOKING STUFF UP   
-ADD TEXT ABOUT ANNOTATIONS
+
+## See what I'm Googling!
+I realize that oftentimes, these carefully curated workshop materials may mask the amount of Googling / trial and error / general frustrations that I myself experience when building instructional content -- I do *a lot* of Googling, and don't know most of what I end up teaching off the top of my head. In an attempt to better normalize Googling for code help, I began saving some of the resources I referenced -- they're linked and noted with the `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` symbol. **Disclaimer:** I only thought to do this about half-way through, so the amount of reference materials is severely underestimated (just know that I've either had to look up to remind myself how to do most things, or do some serious digging to learn how to do something for the first time). 
+
+## Check out the new Quarto code annotations feature!
+
+Line-based code annotations are a new feature of Quarto version 1.3, and I think they're pretty nifty. Find numbered explanations beneath particular code chunks -- clicking on a number will highlight the corresponding line of code. You can learn more about using annotations [here](https://quarto.org/docs/authoring/code-annotation).
+
