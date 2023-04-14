@@ -1,0 +1,23 @@
+---
+format: html
+---
+
+# `r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` Review & Resources
+
+Take a look back at [Allison Horst's](https://allisonhorst.github.io/) lectures and labs from EDS 221 to review functions and for loops, and for additional practice.
+
+- [**Lecture 5:** Conditionals and intro to for loops](https://docs.google.com/presentation/d/e/2PACX-1vSaVG1shsD0XcHavYIhPJ7aUKUPurCy4bsBEcLdFPjeRtZv3SNnnPsklcUDwswveOQlFcXXbrYRvmFR/pub?start=false&loop=false&delayms=3000&slide=id.p)
+- [**Lecture 6:** Iteration continued - some complexity, then some sugar](https://docs.google.com/presentation/d/e/2PACX-1vThIFBj2Bkjs9eYbO3tnrJ8GCd0RBzfHTR9CCq1WWcji6SyXmdW36m8n4ToSPf2nSpj-NtDX4yWJTgR/pub?start=false&loop=false&delayms=3000&slide=id.p)
+- [**Lecture 7:** Introduction to functions](https://docs.google.com/presentation/d/e/2PACX-1vQI2_jMfAiH4hAVXO8AYE5g8w6iC_N3LIZhZwYYQI5vRRRCwD6_517EkzUU0zwCM2a-BcZvx3YOLyno/pub?start=false&loop=false&delayms=3000&slide=id.p)
+- [**Lecture 8:** Functions contineud - planning, building, adding complexity, useful warnings and error messages](https://docs.google.com/presentation/d/e/2PACX-1vQE29VZuyRqlbj8F4K-uIyybhmz1_V4ZkHTYj8xW0Xoy6lHLTnclDqb6BXOBnY0YVq1zjgWPnSr-OyZ/pub?start=false&loop=false&delayms=3000&slide=id.p)
+- [**Lecture 9:** Functions continued - testing with `{testthat}`, sourcing, documentation, an R package](https://docs.google.com/presentation/d/e/2PACX-1vQE29VZuyRqlbj8F4K-uIyybhmz1_V4ZkHTYj8xW0Xoy6lHLTnclDqb6BXOBnY0YVq1zjgWPnSr-OyZ/pub?start=false&loop=false&delayms=3000&slide=id.p)
+- [**Lab:** Conditionals and intro to for loops](https://allisonhorst.github.io/EDS_221_programming-essentials/interactive_sessions/day_3_interactive.html)
+- [**Lab:** Functions - introduction, basics, examples](https://allisonhorst.github.io/EDS_221_programming-essentials/interactive_sessions/day_4_interactive.html)
+- [**Lab:** Functions continued: testing, sourcing, documentation, sharing](https://allisonhorst.github.io/EDS_221_programming-essentials/interactive_sessions/day_5_interactive.html)
+
+I turn to [R for Data Science](https://r4ds.had.co.nz/index.html), by Hadley Wickham & Garrett Grolemund, often for learning/review, including these two particularly relevant chapters: 
+
+- [Ch. 19: Functions](https://r4ds.had.co.nz/functions.html)
+- [Ch. 21: Iteration](https://r4ds.had.co.nz/iteration.html)
+
+And remember, these concepts, workflows, approaches, etc. apply regardless of language (`r fontawesome::fa("r-project", fill = "#5A5A5A", a11y = "sem")` `r fontawesome::fa("python", fill = "#5A5A5A", a11y = "sem")`)!

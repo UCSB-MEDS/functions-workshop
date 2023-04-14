@@ -26,3 +26,4 @@ editor_options:
 
 {{< include /sections/7-stage3.qmd >}}
 
+{{< include /sections/8-resources.qmd >}}
