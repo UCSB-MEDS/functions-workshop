@@ -139,10 +139,10 @@ for (i in 1:length(temp_files)){
 #| warning: false
 
 # get list of dfs to clean ----
-raw_data <- c("alegria", "carpinteria", "mohawk") # <1>
+raw_dfs <- c("alegria", "mohawk", "carpinteria") # <1>
 
 # for loop to clean dfs using `clean_ocean_temps()` ---- 
-for (i in 1:length(raw_data)) { # <2>
+for (i in 1:length(raw_dfs)) { # <2>
 
 } # <2>
 ```
@@ -160,16 +160,16 @@ for (i in 1:length(raw_data)) { # <2>
 #| warning: false
 
 # get list of dfs to clean ----
-raw_data <- c("alegria", "carpinteria", "mohawk")
+raw_dfs <- c("alegria", "mohawk", "carpinteria")
 
 # for loop to clean dfs using `clean_ocean_temps()` ----
-for (i in 1:length(raw_data)) {
+for (i in 1:length(raw_dfs)) {
   
   # print message ----
-  message("cleaning df", i, ": -------- ", raw_data[i], " --------") # <1>
+  message("cleaning df", i, ": -------- ", raw_dfs[i], " --------") # <1>
   
-  # create new name ---- 
-  df_name <- raw_data[i] # <2>
+  # create new df name to assign clean data to ----
+  df_name <- raw_dfs[i] # <2>
   df_clean_name <- paste0(df_name, "_clean") # <2>
   message("New df will be named: ", df_clean_name) # <1>
 
@@ -180,7 +180,7 @@ for (i in 1:length(raw_data)) {
 3. build the object name that we'll save our cleaned data frame to -- we want this to be in the format `*_clean`, where `*` is the site name (e.g. `alegria_clean`); we can use the `paste()` function on `df_name` to do this
 4. add a helpful message so we can easily keep track of what our for loop is doing
 
-## **Intermediate Step:**
+### **Intermediate Step:**
 
 ***The primary goal of this intermediate step is to learn how to call objects from the global environment using a matching character string.***
 
@@ -191,19 +191,24 @@ for (i in 1:length(raw_data)) {
 #| warning: false
 
 # get vector of dfs to clean ----
-raw_data <- c("alegria", "carpinteria", "mohawk")
+raw_dfs <- c("alegria", "mohawk", "carpinteria")
 
 # the first element of our vector, `raw_data` (which is a character string)
-first_df_name <- raw_data[1]
+first_df_name <- raw_dfs[1]
 
 # call an object from environment using the  ----
 test <- get(first_df_name) # <1>
+
+# combining the two steps above into one ----
+test <- get(raw_dfs[1]) # <2>
 ```
 1. figure out how to call objects from the environment using variable names (`r fontawesome::fa("book-open-reader", fill = "#5A5A5A", a11y = "sem")` I referenced [this resource](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get))
+2. combining both the previous steps into one line of code
 
 ### **Step 3:** 
 
-***The primary goal of step 3 is to ***
+***The primary goal of step 3 is to assign the cleaned data frame to the object name we just created.***
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -211,29 +216,39 @@ test <- get(first_df_name) # <1>
 #| warning: false
 
 # get list of dfs to clean ----
-raw_data <- c("alegria", "carpinteria", "mohawk")
+raw_dfs <- c("alegria", "mohawk", "carpinteria")
 
 # for loop to clean dfs using `clean_ocean_temps()` ----
-for (i in 1:length(raw_data)) {
+for (i in 1:length(raw_dfs)) {
   
   # print message ----
-  message("cleaning df ", i, ": -------- ", raw_data[i], " --------")
+  message("cleaning df ", i, ": -------- ", raw_dfs[i], " --------")
   
-  # create new df name ----
-  df_name <- raw_data[i]
+  # create new df name to assign clean data to ----
+  df_name <- raw_dfs[i]
   df_clean_name <- paste0(df_name, "_clean")
   message("New df will be named: ", df_clean_name)
   
   # clean data ----
-  assign(df_clean_name, clean_ocean_temps(df = get(raw_data[i]), include_temps = c("Temp_top", "Temp_bot"))) # <1>
+  assign(x = df_clean_name, value = clean_ocean_temps(raw_data = get(raw_dfs[i]), site_name = df_name, include_temps = c("Temp_top", "Temp_bot"))) # <1>
   
   message("------------------------------------")
+  
 }
 ```
 1. assign the cleaned data frame to the object name, `df_clean_name` (just as we did when we read in data earlier)
 
 ## **iii.** Write a for loop to **plot** all data
 
+### **Step 1:**
+
+***The primary goal of step 1 is to get a list of elements (in our case, cleaned data frame objects) to iterate over. We'll also create the skeleton of our for loop which will be used to iterate over those data frames***
+```{r}
+#| eval: false
+#| echo: true
+#| message: false
+#| warning: false
+```
 
 ## **iv.** Putting it all together
 
@@ -246,7 +261,9 @@ Okay, now let's bring all these pieces together! Our revised scripts might look 
 #| echo: true
 #| message: false
 #| warning: false
-
+#..........................import data...........................
+#...........................clean data..........................
+#............................plot data...........................
 ```
 
 ## `utils/clean_ocean_temps.R`
@@ -261,9 +278,10 @@ Even if you don't plan to publish your function as part of a package, documentin
 #| echo: true
 #| message: false
 #| warning: false
-#' Process CDT/ADCP temperature data
+#' Process CTD/ADCP temperature data
 #'
 #' @param raw_data data frame of CTD/ADCP data collected at SBC LTER site moorings; search for data on the EDI Data Portal (http://portal.edirepository.org:80/nis/simpleSearch?defType=edismax&q=SBC+LTER%5C%3A+Ocean%5C%3A+Currents+and+Biogeochemistry%5C%3A+Moored+CTD+and+ADCP+data&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false)
+#' @param site_name Santa Barbara Coastal LTER site name as a character string
 #' @param include_temps vector of character strings that includes one or more of the following variable names: Temp_top, Temp_mid, Temp_top
 #'
 #' @return a data frame
@@ -271,23 +289,15 @@ Even if you don't plan to publish your function as part of a package, documentin
 #'
 #' @examples
 #' my_clean_df <- clean_ocean_temps(raw_data = my_raw_df, include_temps = c("Temp_bot"))
-clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ 
+clean_ocean_temps <- function(raw_data, site_name, include_temps = c("Temp_top", "Temp_mid", "Temp_bot")){ 
   
-  # load dependencies ----
-  library(dplyr) 
-  library(tidyr)
-  library(stringr) 
-  library(chron)
-  library(naniar)
-  
-  # if data contains these colnames, clean the script
+  # if data contains these colnames, clean the script ----
   if(all(c("year", "month", "day", "decimal_time", "Temp_bot", "Temp_top", "Temp_mid") %in% colnames(raw_data))) { 
     
     message("Cleaning data...") 
     
-    # get site name as character string from object (raw_data) name ----
-    site_name <- deparse(substitute(raw_data)) 
-    site_name <- paste(str_to_title(site_name), "Reef") 
+    # format site name ----
+    site_name_formatted <- paste(str_to_title(site_name), "Reef")
     
     # columns to select ----
     standard_cols <- c("year", "month", "day", "decimal_time") 
@@ -297,7 +307,7 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
     temps_clean <- raw_data |> 
       select(all_of(all_cols)) |> 
       filter(year %in% c(2005:2020)) |> 
-      mutate(site = rep(site_name)) |> 
+      mutate(site = rep(site_name_formatted)) |> 
       unite(col = date, year, month, day, sep = "-", remove = FALSE) |> 
       mutate(time = times(decimal_time)) |> 
       unite(col = date_time, date, time, sep = " ", remove = TRUE) |> 
@@ -307,7 +317,7 @@ clean_ocean_temps <- function(raw_data, include_temps = c("Temp_top", "Temp_mid"
              day = as.numeric(day)) |>
       mutate(month_name = as.factor(month.name[month])) |>
       replace_with_na(replace = list(Temp_bot = 9999, Temp_top = 9999, Temp_mid = 9999)) |> 
-      select(any_of(c(site, date_time, year, month, day, month_name, Temp_bot, Temp_mid, Temp_top))) 
+      select(any_of(c("site", "date_time", "year", "month", "day", "month_name", "Temp_bot", "Temp_mid", "Temp_top")))
     
     # return cleaned df ----
     return(temps_clean) 
@@ -333,7 +343,7 @@ Even if you don't plan to publish your function as part of a package, documentin
 #| echo: true
 #| message: false
 #| warning: false
-#' Create ridge line plot of CDT/ADCP bottom temperature data
+#' Create ridge line plot of CTD/ADCP bottom temperature data
 #'
 #' @param clean_data a data frame that has been pre-processed using clean_ocean_temp()
 #'
@@ -343,11 +353,6 @@ Even if you don't plan to publish your function as part of a package, documentin
 #' @examples
 #' my_plot <- plot_ocean_temps(clean_data = my_clean_df)
 plot_ocean_temps <- function(clean_data) { 
-  
-  # load dependencies ----
-  library(dplyr)
-  library(ggplot2)
-  library(ggridges)
   
   # get site name for plot title ----
   site_name <- unique(clean_data$site)
@@ -361,7 +366,7 @@ plot_ocean_temps <- function(clean_data) {
     scale_y_discrete(limits = rev(month.name)) + 
     scale_fill_gradientn(colors = c("#2C5374","#778798", "#ADD8E6", "#EF8080", "#8B3A3A"), name = "Temp. (°C)") +
     labs(x = "Bottom Temperature (°C)",
-         title = paste("Bottom Temperatures at",  site_name, ", Santa Barbara, CA"), # 2
+         title = paste("Bottom Temperatures at ", site_name, ", Santa Barbara, CA", sep = ""), 
          subtitle = "Temperatures (°C) aggregated by month from 2005 - 2022") +
     ggridges::theme_ridges(font_size = 13, grid = TRUE) +
     theme(
